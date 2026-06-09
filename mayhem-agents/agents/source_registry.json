@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "name": "Kempsey Shire Council",
+      "type": "minutes"
+    },
+    {
+      "name": "NSW Government",
+      "type": "policy"
+    },
+    {
+      "name": "Australian Government",
+      "type": "public_record"
+    }
+  ]
+}
