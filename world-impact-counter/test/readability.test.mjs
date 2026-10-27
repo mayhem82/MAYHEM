@@ -5,7 +5,7 @@ const current=await readFile(new URL('../styles.css',import.meta.url),'utf8');
 const before=await readFile(new URL('./fixtures/styles.before-readability.css',import.meta.url),'utf8');
 const fontSizes=css=>[...css.matchAll(/font-size:([^;}]+)/g)].map(match=>match[1]);
 test('small-text baseline is exactly +4px once; large type and clamp values remain unchanged',()=>{
-  const old=fontSizes(before),now=fontSizes(current);
+  const old=fontSizes(before),now=fontSizes(current.split('/* Country selection')[0]);
   assert.equal(now.length,old.length);
   let changed=0;
   old.forEach((size,index)=>{
@@ -23,7 +23,7 @@ test('narrow-width layout rules allow text reflow without reducing text size',()
   assert.match(current,/@media\(max-width:360px\)[\s\S]*\.controls\{grid-template-columns:minmax\(0,1fr\)\}/);
   assert.match(current,/\.refresh-panel>div,\.indicator-top>h3,\.section-heading>\*\{min-width:0\}/);
   assert.match(current,/\.gauge-axis,\.estimate-unit,footer\{overflow-wrap:anywhere\}/);
-  const narrow=current.slice(current.indexOf('@media(max-width:360px)'));
+  const narrow=current.slice(current.indexOf('@media(max-width:360px)'),current.indexOf('/* Country selection'));
   assert.ok(!narrow.includes('font-size:'),'narrow screens never shrink the increased text');
   for(const viewport of [320,360,375,390,412]){
     const content=viewport-44;
@@ -31,4 +31,11 @@ test('narrow-width layout rules allow text reflow without reducing text size',()
     assert.ok(timerContent>0);
     if(viewport>360)assert.ok(timerContent-84-10>0,'two-column control has a shrinkable positive first track');
   }
+});
+test('new country controls and notes keep readable text without incrementing the existing baseline',()=>{
+ const additions=current.split('/* Country selection')[1] || '';
+ assert.ok(additions);
+ for(const size of fontSizes(additions)) assert.ok(/^\d+px$/.test(size) && Number.parseFloat(size)>=14);
+ assert.match(additions,/min-width:0/);
+ assert.match(additions,/\.noaa\[hidden\]\{display:none\}/);
 });

@@ -5,7 +5,7 @@ import path from 'node:path';
 const root = fileURLToPath(new URL('.', import.meta.url));
 const port = Number(process.env.PORT || 4173);
 const types = { '.html': 'text/html', '.css': 'text/css', '.mjs': 'text/javascript', '.json': 'application/json' };
-const allowed = new Set(['/index.html', '/styles.css', '/src/app.mjs', '/src/engine.mjs', '/src/data-store.mjs', '/src/gauge.mjs', '/src/noaa.mjs', '/src/noaa-parser.mjs', '/data/indicators.json']);
+const allowed = new Set(['/index.html', '/styles.css', '/src/app.mjs', '/src/engine.mjs', '/src/data-store.mjs', '/src/gauge.mjs', '/src/noaa.mjs', '/src/noaa-parser.mjs', '/data/indicators.json', '/data/source-manifest.json']);
 http.createServer(async (req, res) => {
   try {
     const pathname = new URL(req.url, 'http://localhost').pathname;

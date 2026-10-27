@@ -1,6 +1,6 @@
 import { quantityGauge } from './engine.mjs';
 const ns = 'http://www.w3.org/2000/svg';
-const num = new Intl.NumberFormat(undefined,{maximumFractionDigits:1});
+const num = new Intl.NumberFormat(undefined,{maximumFractionDigits:3});
 function svgElement(tag, attributes) {
   const element = document.createElementNS(ns,tag);
   for (const [key,value] of Object.entries(attributes)) element.setAttribute(key,value);

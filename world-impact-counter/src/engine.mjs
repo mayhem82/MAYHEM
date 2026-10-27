@@ -65,10 +65,34 @@ export function validateDataset(data) {
     || !Array.isArray(data.indicators)) throw new Error('Unsupported or incomplete source data');
   const ids = new Set();
   for (const item of data.indicators) {
-    if (!validIndicator(item) || ids.has(item.id)) throw new Error('Invalid or duplicate indicator');
+    if (!validIndicator(item) || !/^[a-z0-9][a-z0-9-]*$/.test(item.id) || ids.has(item.id)) throw new Error('Invalid or duplicate indicator');
     ids.add(item.id);
   }
+  const countries = new Set();
+  if (data.countries !== undefined && !Array.isArray(data.countries)) throw new Error('Invalid country coverage');
+  for (const country of data.countries || []) {
+    if (!/^[A-Z]{3}$/.test(country.id || '') || countries.has(country.id) || typeof country.name !== 'string' || !country.name.trim() || !Array.isArray(country.indicators)) throw new Error('Invalid country definition');
+    countries.add(country.id);
+    const metricIds = new Set();
+    for (const item of country.indicators) {
+      if (!validIndicator(item) || !/^[a-z0-9][a-z0-9-]*$/.test(item.id) || metricIds.has(item.id)) throw new Error('Invalid country indicator');
+      metricIds.add(item.id);
+    }
+    for (const observation of country.observations || []) {
+      if (!observation.name || !Number.isFinite(observation.value) || !observation.unit || !observation.referencePeriod || !isHttpsUrl(observation.source?.url) || !isIsoDate(observation.source?.accessed)) throw new Error('Invalid country observation');
+    }
+  }
   return data;
+}
+
+export function geographies(data) {
+  return [{id:'WORLD',name:'World',indicators:data?.indicators || []},...(data?.countries || [])];
+}
+export function geographyKey(geographyId, indicatorId) {
+  return geographyId === 'WORLD' ? indicatorId : `${geographyId}:${indicatorId}`;
+}
+export function datasetRates(data) {
+  return geographies(data).flatMap(geography=>geography.indicators.map(item=>({...item,id:geographyKey(geography.id,item.id)})));
 }
 
 // Each rate applies prospectively. A refreshed rate never rewrites accrued totals.

@@ -1,0 +1,343 @@
+{
+  "verified": "2026-10-27",
+  "coverage": {
+    "countriesAndAreas": 240,
+    "co2": 214,
+    "grossDeforestation": 139,
+    "foodWaste": 36,
+    "forestPeriods": {
+      "2020-2025": 124,
+      "2015-2020": 10,
+      "2010-2015": 5,
+      "2000-2010": 0,
+      "1990-2000": 0
+    },
+    "forestFlags": {
+      "A": 124,
+      "I": 15
+    }
+  },
+  "sources": [
+    {
+      "id": "gcb-country",
+      "url": "https://globalcarbonbudget.org/download/2345/?tmstv=1762815968",
+      "filename": "National_Fossil_Carbon_Emissions_2025_v0.3.xlsx",
+      "version": "v0.3",
+      "sha256": "a0edc6560fb0c0d974eff994b146ad1be87c79f158831732692c688a46ec55c0",
+      "sheet": "Territorial Emissions",
+      "headersRow": 12,
+      "dataRow": 187,
+      "referenceYear": 2024,
+      "countryColumns": "B:HG",
+      "conversion": "MtC × 3.664 × 1,000,000 = tonnes CO2",
+      "excludedColumns": "HH:HX: regional aggregates, international aviation/shipping, statistical difference and World",
+      "balanceCheck": {
+        "countryMtC": 10209.09230538643,
+        "bunkersMtC": 325.45410090313203,
+        "worldMtC": 10534.5464062896,
+        "residualMtC": -3.8198777474462986e-11
+      },
+      "accessRoute": "Independently public publisher workbook; no gated ICOS licence endpoint used."
+    },
+    {
+      "id": "fao-country",
+      "url": "https://fra-data.fao.org/api/file/bulk-download?assessmentName=fra&countryIso=WO&cycleName=2025&includeClimaticDomain=false&includeVoluntaryUpdates=false&lang=en",
+      "sha256": "1a8865cdd2dbb165d03e3274cdfe8633149a10ca729fc02414008f3867754665",
+      "dataset": "FRA 2025",
+      "file": "Intervals_2026-10-27.csv",
+      "exportDateMeaning": "Download date only, as explained in archive README",
+      "countryRows": 236,
+      "conversion": "1000 hectares/year × 1000 = hectares/year",
+      "selection": "Latest nonblank gross-deforestation interval with A or I flag; preserve zero, exclude missing O/M; same-period expansion context",
+      "flagDefinitions": {
+        "A": "Normal value, official data reported by country/area",
+        "I": "Imputed value, desk study, data compiled by FAO",
+        "O": "Missing value",
+        "M": "Missing value; cannot exist, denominator zero or missing"
+      }
+    },
+    {
+      "id": "un-food-country",
+      "url": "https://unstats.un.org/sdgapi/v1/sdg/Series/Data?seriesCode=AG_FOOD_WST&pageSize=10000",
+      "sha256": "099340edfd7ec998a724298327b667da4719cce6e604bb8424b085a4a1265980",
+      "series": "AG_FOOD_WST",
+      "rawRows": 2395,
+      "referenceYear": 2022,
+      "selection": "HHS + OOHC + RTL; each UNEP High/Medium Confidence or Eurostat; exclude D; no ALL totals",
+      "candidates": 38,
+      "comparable": 36,
+      "excluded": [
+        {
+          "id": "NLD",
+          "name": "Netherlands (Kingdom of the)",
+          "reason": "Definition differs (D)",
+          "sectors": [
+            "RTL",
+            "OOHC"
+          ]
+        },
+        {
+          "id": "ESP",
+          "name": "Spain",
+          "reason": "Definition differs (D)",
+          "sectors": [
+            "HHS"
+          ]
+        }
+      ],
+      "attributes": [
+        {
+          "id": "Nature",
+          "codes": [
+            {
+              "code": "C",
+              "description": "Country data",
+              "sdmx": "C"
+            },
+            {
+              "code": "CA",
+              "description": "Country adjusted data",
+              "sdmx": "CA"
+            },
+            {
+              "code": "E",
+              "description": "Estimated data",
+              "sdmx": "E"
+            },
+            {
+              "code": "G",
+              "description": "Global monitoring data",
+              "sdmx": "G"
+            },
+            {
+              "code": "M",
+              "description": "Modeled data",
+              "sdmx": "M"
+            },
+            {
+              "code": "N",
+              "description": "Non-relevant",
+              "sdmx": "N"
+            },
+            {
+              "code": "NA",
+              "description": "Data nature not available",
+              "sdmx": "_X"
+            }
+          ]
+        },
+        {
+          "id": "Observation Status",
+          "codes": [
+            {
+              "code": "A",
+              "description": "Normal value",
+              "sdmx": "A"
+            },
+            {
+              "code": "B",
+              "description": "Time series break",
+              "sdmx": "B"
+            },
+            {
+              "code": "D",
+              "description": "Definition differs",
+              "sdmx": "D"
+            },
+            {
+              "code": "E",
+              "description": "Estimated value",
+              "sdmx": "E"
+            },
+            {
+              "code": "F",
+              "description": "Forecast value",
+              "sdmx": "F"
+            },
+            {
+              "code": "G",
+              "description": "Experimental value",
+              "sdmx": "G"
+            },
+            {
+              "code": "H",
+              "description": "Missing value; holiday or weekend",
+              "sdmx": "H"
+            },
+            {
+              "code": "I",
+              "description": "Imputed value (CCSA definition)",
+              "sdmx": "I"
+            },
+            {
+              "code": "J",
+              "description": "Derogation",
+              "sdmx": "J"
+            },
+            {
+              "code": "K",
+              "description": "Data included in another category",
+              "sdmx": "K"
+            },
+            {
+              "code": "L",
+              "description": "Missing value; data exist but were not collected",
+              "sdmx": "L"
+            },
+            {
+              "code": "M",
+              "description": "Missing value; data cannot exist",
+              "sdmx": "M"
+            },
+            {
+              "code": "N",
+              "description": "Not significant",
+              "sdmx": "N"
+            },
+            {
+              "code": "O",
+              "description": "Missing value",
+              "sdmx": "O"
+            },
+            {
+              "code": "P",
+              "description": "Provisional value",
+              "sdmx": "P"
+            },
+            {
+              "code": "Q",
+              "description": "Missing value; suppressed",
+              "sdmx": "Q"
+            },
+            {
+              "code": "S",
+              "description": "Strike and other special events",
+              "sdmx": "S"
+            },
+            {
+              "code": "U",
+              "description": "Low reliability",
+              "sdmx": "U"
+            },
+            {
+              "code": "V",
+              "description": "Unvalidated value",
+              "sdmx": "V"
+            },
+            {
+              "code": "W",
+              "description": "Includes data from another category",
+              "sdmx": "W"
+            }
+          ]
+        },
+        {
+          "id": "Units",
+          "codes": [
+            {
+              "code": "TONNES",
+              "description": "Tonnes",
+              "sdmx": "T"
+            }
+          ]
+        }
+      ],
+      "dimensions": [
+        {
+          "id": "Food Waste Sector",
+          "codes": [
+            {
+              "code": "RTL",
+              "description": "Retail",
+              "sdmx": "FWS_RTL"
+            },
+            {
+              "code": "OOHC",
+              "description": "Out-of-home consumption",
+              "sdmx": "FWS_OOHC"
+            },
+            {
+              "code": "HHS",
+              "description": "Households",
+              "sdmx": "FWS_HHS"
+            },
+            {
+              "code": "MNFC",
+              "description": "Manufacturing",
+              "sdmx": "FWS_MNFC"
+            },
+            {
+              "code": "ALL",
+              "description": "All food waste sectors",
+              "sdmx": "_T"
+            }
+          ]
+        },
+        {
+          "id": "Reporting Type",
+          "codes": [
+            {
+              "code": "N",
+              "description": "National",
+              "sdmx": "N"
+            },
+            {
+              "code": "G",
+              "description": "Global",
+              "sdmx": "G"
+            },
+            {
+              "code": "R",
+              "description": "Regional",
+              "sdmx": "R"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "geographyAliases": {
+    "Bonaire, Saint Eustatius and Saba": "BES",
+    "Cape Verde": "CPV",
+    "North Korea": "PRK",
+    "Faeroe Islands": "FRO",
+    "Iran": "IRN",
+    "Laos": "LAO",
+    "Nauru": "NRU",
+    "Netherlands": "NLD",
+    "State of Palestine": "PSE",
+    "Bolivia": "BOL",
+    "South Korea": "KOR",
+    "Moldova": "MDA",
+    "Russia": "RUS",
+    "Saint Helena": "SHN",
+    "Syria": "SYR",
+    "United Kingdom": "GBR",
+    "Tanzania": "TZA",
+    "USA": "USA",
+    "Venezuela": "VEN"
+  },
+  "extraSourceGeographies": [
+    {
+      "id": "HKG",
+      "name": "Hong Kong",
+      "m49": "344"
+    },
+    {
+      "id": "MAC",
+      "name": "Macao",
+      "m49": "446"
+    },
+    {
+      "id": "TWN",
+      "name": "Taiwan",
+      "m49": "158"
+    },
+    {
+      "id": "XKX",
+      "name": "Kosovo",
+      "m49": null
+    }
+  ],
+  "rawEvidence": "Each country retains raw MtC cell, forest interval values/flags, food components/confidence/footnotes/statuses in indicators.json."
+}

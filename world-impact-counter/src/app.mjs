@@ -1,4 +1,4 @@
-import { ActiveClock, YEAR_SECONDS, trendLabel, isHttpsUrl } from './engine.mjs';
+import { ActiveClock, YEAR_SECONDS, trendLabel, isHttpsUrl, geographies, geographyKey, datasetRates } from './engine.mjs';
 import { DatasetStore } from './data-store.mjs';
 import { initNoaa } from './noaa.mjs';
 import { createQuantityGauge } from './gauge.mjs';
@@ -11,8 +11,11 @@ let lastAttempt = -Infinity;
 let refreshing = false;
 let started = false;
 let downloadUrl;
+let selectedGeography = 'WORLD';
+let selectedName = 'World';
+let noaaActivated = false;
 const nodes = new Map();
-const number = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 });
+const number = new Intl.NumberFormat(undefined, { maximumFractionDigits: 3 });
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -31,27 +34,64 @@ function empty(message) {
 }
 function renderIndicators() {
   $('indicators').replaceChildren(); nodes.clear();
-  for (const item of store.data.indicators) {
+  const geography = geographies(store.data).find(item=>item.id===selectedGeography) || {id:selectedGeography,name:selectedName,indicators:[]};
+  selectedName = geography.name;
+  $('selected-geography').textContent = `Selected geography: ${geography.name}`;
+  $('indicator-title').textContent = selectedGeography === 'WORLD' ? 'During your moment' : `${geography.name} during your moment`;
+  $('geography-note').textContent = 'Switching views keeps the same active time. Each available rate estimates only the selected geography; missing data is never zero.';
+  $('noaa-panel').hidden = selectedGeography !== 'WORLD';
+  for (const item of geography.indicators) {
+    const ledgerId = geographyKey(geography.id,item.id);
     const card = el('article', `indicator ${item.id}`);
     const top = el('div', 'indicator-top');
     const label = trendLabel(item);
     top.append(el('h3', '', item.name), el('span', `trend ${item.trend?.direction || ''}`, label));
     const value = el('div', 'estimate', 'Unavailable');
     const gauge = createQuantityGauge(item.unit);
-    card.append(top, gauge.element, value, el('div', 'estimate-unit', `${item.unit} \u00b7 estimated since Start`));
+    card.append(top, gauge.element, value, el('div', 'estimate-unit', `${item.unit} \u00b7 estimated for ${geography.name} since Start`));
     card.append(el('p', 'gauge-note', 'Auto-scaled quantity axis. Position is not severity or trend.'));
     card.append(el('p', 'reference-period', `Data period: ${item.ratePeriod}`));
-    if (store.ledger.entries.get(item.id).firstAvailable > 0) card.append(el('p', '', 'Excludes active time before this rate became available.'));
+    if (store.ledger.entries.get(ledgerId).firstAvailable > 0) card.append(el('p', '', 'Excludes active time before this rate became available.'));
+    if (geography.id !== 'WORLD' && item.scope) card.append(el('p', 'scope-note', `Scope: ${item.scope}`));
+    if (item.qualityNote) card.append(el('p', '', item.qualityNote));
     const details = el('details');
     details.append(el('summary', '', 'Source & assumptions'), el('p', '', `Current annual rate: ${number.format(item.annualRate)} ${item.unit} (${number.format(item.annualRate / YEAR_SECONDS)}/second)`));
     details.append(link(item.source.title, item.source.url), el('p', '', `Published ${item.source.published || 'not specified'} \u00b7 Verified ${item.source.accessed}`));
     if (item.scope) details.append(el('p', '', `Coverage: ${item.scope}`));
     details.append(el('p', '', item.limitations || 'Constant-rate approximation; actual events vary over time.'));
     if (item.trend?.note && isHttpsUrl(item.trend.sourceUrl)) details.append(el('p', '', `Trend (${item.trend.period}): ${item.trend.note}`), link('Trend source', item.trend.sourceUrl));
-    card.append(details); nodes.set(item.id, {value,gauge}); $('indicators').append(card);
+    card.append(details); nodes.set(ledgerId, {value,gauge}); $('indicators').append(card);
   }
-  if (!store.data.indicators.length) empty('No verified annual rates are provided. The timer still works; no indicator amounts are invented.');
-  $('data-status').textContent = `${store.data.indicators.length} sourced counters`;
+  if (!geography.indicators.length) empty(`No verified ticking rates are available for ${geography.name}. The active timer continues. No values are borrowed from world totals.`);
+  for (const missing of geography.unavailableMetrics || []) {
+    const card=el('article','indicator unavailable');
+    card.append(el('h3','',missing.name),el('div','estimate','Unavailable'),el('p','',missing.reason));
+    $('indicators').append(card);
+  }
+  for (const observation of geography.observations || []) {
+    const card=el('article','indicator reported-context');
+    card.append(el('p','eyebrow','REPORTED CONTEXT · DOES NOT TICK'),el('h3','',observation.name),el('div','estimate',`${number.format(observation.value)} ${observation.unit}`),el('p','',`Reference period: ${observation.referencePeriod}`),el('p','',observation.scope || ''),link(observation.source.title || 'Official source',observation.source.url),el('p','',`Verified ${observation.source.accessed}`),el('p','',observation.limitations || ''));
+    $('indicators').append(card);
+  }
+  $('coverage-notes').replaceChildren(...(geography.coverageNotes || []).map(note=>el('p','',note)));
+  $('data-status').textContent = `${geography.indicators.length} sourced estimate${geography.indicators.length===1?'':'s'}`;
+}
+function renderCountryOptions() {
+  const query=$('country-search').value.trim().toLocaleLowerCase();
+  const available=geographies(store.data);
+  const filtered=available.filter(item=>item.id==='WORLD' || item.id==='AUS' || item.id===selectedGeography || `${item.name} ${item.id} ${(item.searchAliases||[]).join(' ')}`.toLocaleLowerCase().includes(query));
+  if (!filtered.some(item=>item.id===selectedGeography)) filtered.push({id:selectedGeography,name:selectedName,indicators:[]});
+  $('geography').replaceChildren(...filtered.map(item=>{
+    const option=el('option','',`${item.name}${item.indicators.length?'':' — no ticking data'}`);option.value=item.id;return option;
+  }));
+  $('geography').value=selectedGeography;
+  $('country-results').textContent=`${available.filter(item=>item.id!=='WORLD').length} countries in the source file. Search filters this list; World and Australia stay easy to find.`;
+}
+function chooseGeography(id) {
+  const found=geographies(store.data).find(item=>item.id===id);
+  if (!found) return;
+  selectedGeography=id; selectedName=found.name; renderCountryOptions(); renderIndicators(); paint();
+  if (id==='WORLD' && started && !noaaActivated) { noaaActivated=true; noaa.refresh(); }
 }
 function paint() {
   const seconds = clock.seconds(); const whole = Math.floor(seconds);
@@ -81,7 +121,7 @@ async function refresh() {
     const response = await fetch('./data/indicators.json', { cache:'no-store', signal:controller.signal });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json(); const changed = !store.data || store.data.version !== data.version;
-    store.accept(data, clock.seconds()); if (changed) renderIndicators();
+    store.accept(data, clock.seconds()); if (changed) {renderCountryOptions();renderIndicators();}
     if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     downloadUrl = URL.createObjectURL(new Blob([JSON.stringify(store.data, null, 2)], {type:'application/json'}));
     $('download').href = downloadUrl; $('download').removeAttribute('aria-disabled');
@@ -92,14 +132,18 @@ async function refresh() {
 }
 const noaa = initNoaa();
 $('start').addEventListener('click', () => {
-  if (clock.running) clock.pause(); else { clock.start(); if (!started) noaa.refresh(); started = true; }
+  if (clock.running) clock.pause(); else { clock.start(); if (!started && selectedGeography==='WORLD') {noaaActivated=true;noaa.refresh();} started = true; }
   controls();
 });
 $('reset').addEventListener('click', () => {
-  clock.reset(); started = false; store.ledger.reset(store.data?.indicators || []); controls();
+  clock.reset(); started = false; store.ledger.reset(datasetRates(store.data)); controls();
   if (store.data) renderIndicators(); paint();
 });
 $('refresh').addEventListener('click', refresh); $('download').setAttribute('aria-disabled', 'true');
+$('geography').addEventListener('change',event=>chooseGeography(event.target.value));
+$('country-search').addEventListener('input',renderCountryOptions);
+$('choose-world').addEventListener('click',()=>chooseGeography('WORLD'));
+$('choose-australia').addEventListener('click',()=>chooseGeography('AUS'));
 document.addEventListener('visibilitychange', () => { paint(); if (!document.hidden && performance.now() - lastAttempt >= POLL_MS) refresh(); });
 setInterval(() => { if (clock.running) paint(); }, 1000);
 setInterval(() => { if (performance.now() - lastAttempt >= POLL_MS) refresh(); }, POLL_MS);
