@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111b22">
+  <meta name="description" content="Explore separate world indicators estimated from published annual rates during an active timer.">
+  <title>World impact counter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="shell">
+  <header><a class="brand" href="./" aria-label="World impact counter home"><span class="brand-icon" aria-hidden="true">◉</span> WORLD IMPACT</a><span class="local">PROTOTYPE</span></header>
+  <section class="intro" aria-labelledby="title"><div class="eyebrow">SEPARATE SIGNALS. SHARED WORLD.</div><h1 id="title">World impact<br>counter.</h1><p>Estimated amounts since Start at published average rates, not live measurements.</p></section>
+  <section class="timer-card" aria-label="Active timer">
+    <div class="timer-heading"><span>YOUR ACTIVE TIME</span><span id="status" class="status" role="status">Ready</span></div>
+    <div id="timer" class="timer" aria-label="0 hours, 0 minutes, 0 seconds">00:00:00</div>
+    <p class="timer-note">Estimates accumulate only while running.</p>
+    <div class="controls"><button id="start" class="primary">Start counter <span aria-hidden="true">↗</span></button><button id="reset" class="secondary" disabled>Reset</button></div>
+  </section>
+  <section class="refresh-panel" aria-label="Source data freshness"><div><p id="refresh-state" role="status">Loading bundled dataset...</p><p id="last-checked">Last successful check: not yet</p><p id="version">Dataset version: unavailable</p></div><button id="refresh" class="secondary">Refresh now</button><p class="refresh-scope">Checks the bundled dataset every 5 minutes while open. It does not check official publishers for new figures.</p></section>
+  <section class="indicators-section" aria-labelledby="indicator-title"><div class="section-heading"><h2 id="indicator-title">During your moment</h2><span id="data-status">Loading sources</span></div><p class="section-note">Each indicator tells a different story. Trends can improve or worsen.</p><div id="indicators"></div></section>
+  <section class="indicator noaa" aria-labelledby="noaa-title"><div class="eyebrow">OFFICIAL DAILY FEED</div><h2 id="noaa-title">Atmospheric CO2 trend</h2><div id="noaa-value" class="estimate">Unavailable</div><p id="noaa-date">Data date: unavailable</p><p id="noaa-trend">Seasonally adjusted global trend estimate</p><p id="noaa-checked">Last successful NOAA fetch: not yet</p><p id="noaa-state" role="status">Press Start to fetch NOAA.</p><button id="noaa-refresh" class="secondary">Check NOAA</button><details><summary>About this daily estimate</summary><p>NOAA estimated global atmospheric CO2 trend, based on four baseline observatories. The seasonally adjusted trend is in parts per million, not an instantaneous direct global measurement, and is not integrated into emitted tonnes.</p><p>Fetches the official CSV on Start, manually, and hourly while open after the first request. Failed checks retain a clearly dated locally cached snapshot. No new observation is implied by an unchanged successful check. NOAA can revise estimates. There is no guaranteed update schedule. Source-file update time is unavailable in this prototype.</p><a href="https://gml.noaa.gov/ccgg/trends/gl_trend.html" target="_blank" rel="noopener noreferrer">NOAA methodology</a><br><a href="https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_trend_gl.csv" target="_blank" rel="noopener noreferrer">Official NOAA CSV</a></details></section>
+  <aside class="context"><span aria-hidden="true">ⓘ</span><p>These are rate-based estimates, not live events or a scientific score of whether the world is getting worse.</p></aside>
+  <details class="methodology"><summary>How this counter works <span aria-hidden="true">+</span></summary><div class="details-body"><h3>From an annual rate to your moment</h3><p>Estimate = published annual amount × active seconds ÷ 31,536,000 (365 days). Approximately signs and rounded displays reflect estimates, not precise observations.</p><p>A constant rate smooths seasonal and geographic variation. A displayed fraction is a mathematical estimate; it does not identify a real event occurring now.</p><h3>Accumulation and trend are different</h3><p>An accumulating total describes a flow over your selected time. A trend compares published periods and can improve, worsen, stay stable or be mixed. Indicators are never added together or converted into an overall score.</p><h3>Your timer</h3><p>The screen updates every second. Pause excludes time until Resume. A background tab continues counting when running, using elapsed timestamps rather than counting screen refreshes. Reset stops the timer and clears your moment. Reloading starts a new session. Device sleep handling can vary by browser.</p><h3>Sources, refresh and rate changes</h3><p>Source publication dates and data reference periods are shown per indicator. The last successful check means the local bundled JSON passed validation, even if unchanged. It does not mean the official source published new data. Polling checks this file every 5 minutes while the page is open; hidden tabs may throttle checks. Returning to the tab triggers a check if due.</p><p>Failed checks retain the last validated dataset and show an error. New rates apply only to future active seconds; amounts already accumulated retain their previous rate. Source details show the current rate. If data arrives after Start, estimates exclude the earlier period with no validated rate. Reset begins a fresh moment with current rates.</p><a id="download" download="world-impact-source-data.json">Download validated source data (JSON) <span aria-hidden="true">↗</span></a></div></details>
+  <footer>Separate signals. A clearer perspective.<br><span>No account. No tracking. No overall score.</span></footer>
+</main>
+<script type="module" src="src/app.mjs"></script>
+</body>
+</html>

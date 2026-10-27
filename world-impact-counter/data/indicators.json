@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "version": "2026-10-27.1",
+  "title": "World impact counter",
+  "verified": "2026-10-27",
+  "yearSeconds": 31536000,
+  "refreshScope": "Checks this bundled dataset only, not official publisher websites.",
+  "officialFeeds": [{ "id": "noaa-global-co2-trend", "url": "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_trend_gl.csv", "methodologyUrl": "https://gml.noaa.gov/ccgg/trends/gl_trend.html", "field": "trend", "unit": "ppm", "description": "NOAA daily estimated global seasonally adjusted atmospheric CO2 trend, based on four baseline observatories; recent values may be revised.", "checkIntervalSeconds": 3600, "verified": "2026-10-27" }],
+  "indicators": [
+    {
+      "id": "fossil-industrial-co2",
+      "name": "Fossil & industrial CO2 emitted",
+      "annualRate": 38100000000,
+      "unit": "metric tonnes of CO2",
+      "ratePeriod": "2025 estimate / projection",
+      "scope": "Global fossil and industrial emissions, including cement-carbonation adjustment",
+      "source": { "title": "Global Carbon Budget 2025, final paper (sections 3.1.4 and 3.4)", "url": "https://essd.copernicus.org/articles/18/3211/2026/", "published": "2026-05-13", "accessed": "2026-10-27" },
+      "trend": { "direction": "worsening", "period": "2025 versus 2024", "note": "Fossil and industrial CO2 increased 1.0%. Combined fossil plus land-use emissions were marginally below 2024; this trend applies only to fossil and industrial CO2.", "sourceUrl": "https://essd.copernicus.org/articles/18/3211/2026/" },
+      "limitations": "38.1 billion metric tonnes of CO2 per year. Estimate / projection, not all greenhouse gases and not net atmospheric accumulation. The final paper's 1.0% annual change supersedes earlier 1.1% press coverage. Uniform rate approximation, not live measurement."
+    },
+    {
+      "id": "gross-deforestation",
+      "name": "Gross forest area deforested",
+      "annualRate": 10900000,
+      "unit": "hectares",
+      "ratePeriod": "2015-2025 annual average",
+      "scope": "Global gross deforestation",
+      "source": { "title": "FAO: Global deforestation slows, but forests remain under pressure", "url": "https://www.fao.org/newsroom/detail/global-deforestation-slows--but-forests-remain-under-pressure--fao-report-shows/en", "published": "2025-10-21", "accessed": "2026-10-27" },
+      "trend": { "direction": "improving", "period": "2015-2025 versus 1990-2000", "note": "Annual gross deforestation declined to 10.9 million hectares from 17.6 million hectares. This is a comparison of historical decadal averages.", "sourceUrl": "https://www.fao.org/newsroom/detail/global-deforestation-slows--but-forests-remain-under-pressure--fao-report-shows/en" },
+      "limitations": "10.9 million hectares per year, a historical decadal average, not a live 2026 observation. Gross deforestation is not net forest loss (4.12 million hectares per year) and is not a count of trees. Uniform rate approximation."
+    },
+    {
+      "id": "food-waste",
+      "name": "Food waste generated",
+      "annualRate": 1050000000,
+      "unit": "metric tonnes",
+      "ratePeriod": "2022 annual estimate",
+      "scope": "Global retail, food service and household food waste, including inedible parts; excludes pre-retail losses",
+      "source": { "title": "UNEP: World squanders over 1 billion meals a day", "url": "https://www.unep.org/en/news-and-stories/press-release/world-squanders-over-1-billion-meals-day-un-report", "published": "2024-03-27", "accessed": "2026-10-27" },
+      "trend": { "direction": "not-established", "period": "Across report editions", "note": "Trend not established: headline estimates across editions are not directly comparable because methods and coverage differ.", "sourceUrl": "https://sdgs.unep.org/article/2a5-food-waste-index" },
+      "limitations": "1.05 billion metric tonnes during 2022. Retail, food service and household waste including inedible parts; excludes pre-retail food losses. Uniform rate approximation, not live measurement."
+    }
+  ]
+}
