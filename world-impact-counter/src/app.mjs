@@ -2,6 +2,7 @@ import { ActiveClock, YEAR_SECONDS, trendLabel, isHttpsUrl, geographies, geograp
 import { DatasetStore } from './data-store.mjs';
 import { initNoaa } from './noaa.mjs';
 import { createQuantityGauge } from './gauge.mjs';
+import { rankCountries, renderCountryList } from './country-list.mjs';
 
 const clock = new ActiveClock();
 const store = new DatasetStore();
@@ -14,6 +15,7 @@ let downloadUrl;
 let selectedGeography = 'WORLD';
 let selectedName = 'World';
 let noaaActivated = false;
+let pendingGeography = null;
 const nodes = new Map();
 const number = new Intl.NumberFormat(undefined, { maximumFractionDigits: 3 });
 function el(tag, className, text) {
@@ -77,6 +79,7 @@ function renderIndicators() {
   $('data-status').textContent = `${geography.indicators.length} sourced estimate${geography.indicators.length===1?'':'s'}`;
 }
 function renderCountryOptions() {
+  if(!store.data){$('country-list-status').textContent='Loading validated source data. The visible list is the bundled CO2 snapshot; a country tap will be applied when loading finishes.';return;}
   const query=$('country-search').value.trim().toLocaleLowerCase();
   const available=geographies(store.data);
   const filtered=available.filter(item=>item.id==='WORLD' || item.id==='AUS' || item.id===selectedGeography || `${item.name} ${item.id} ${(item.searchAliases||[]).join(' ')}`.toLocaleLowerCase().includes(query));
@@ -86,8 +89,14 @@ function renderCountryOptions() {
   }));
   $('geography').value=selectedGeography;
   $('country-results').textContent=`${available.filter(item=>item.id!=='WORLD').length} countries in the source file. Search filters this list; World and Australia stay easy to find.`;
+  const ranked=rankCountries(store.data?.countries,$('country-metric').value||'fossil-industrial-co2',query);
+  $('country-rank-title').textContent=ranked.title;
+  $('country-rank-note').textContent=ranked.note;
+  $('country-list-status').textContent=`${ranked.available.length} available · ${ranked.missing.length} unavailable/non-comparable. Highest reported annual quantities first. Scroll the list and tap a country to view its gauges.`;
+  renderCountryList($('country-list'),ranked,selectedGeography);
 }
-function chooseGeography(id) {
+function chooseGeography(id,name) {
+  if(!store.data){pendingGeography={id,name};$('selected-geography').textContent=`Loading source data for ${name||id}…`;return;}
   const found=geographies(store.data).find(item=>item.id===id);
   if (!found) return;
   selectedGeography=id; selectedName=found.name; renderCountryOptions(); renderIndicators(); paint();
@@ -121,7 +130,10 @@ async function refresh() {
     const response = await fetch('./data/indicators.json', { cache:'no-store', signal:controller.signal });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json(); const changed = !store.data || store.data.version !== data.version;
-    store.accept(data, clock.seconds()); if (changed) {renderCountryOptions();renderIndicators();}
+    store.accept(data, clock.seconds());
+    $('country-metric').disabled=false;
+    if(pendingGeography){const found=geographies(data).find(item=>item.id===pendingGeography.id);if(found){selectedGeography=found.id;selectedName=found.name;}pendingGeography=null;}
+    if (changed) {renderCountryOptions();renderIndicators();}
     if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     downloadUrl = URL.createObjectURL(new Blob([JSON.stringify(store.data, null, 2)], {type:'application/json'}));
     $('download').href = downloadUrl; $('download').removeAttribute('aria-disabled');
@@ -142,8 +154,15 @@ $('reset').addEventListener('click', () => {
 $('refresh').addEventListener('click', refresh); $('download').setAttribute('aria-disabled', 'true');
 $('geography').addEventListener('change',event=>chooseGeography(event.target.value));
 $('country-search').addEventListener('input',renderCountryOptions);
-$('choose-world').addEventListener('click',()=>chooseGeography('WORLD'));
-$('choose-australia').addEventListener('click',()=>chooseGeography('AUS'));
+$('country-metric').addEventListener('change',renderCountryOptions);
+$('country-list').addEventListener('click',event=>{
+  const button=event.target.closest?.('[data-country-id]');
+  if(!button)return;
+  chooseGeography(button.getAttribute('data-country-id'),button.getAttribute('data-country-name'));
+  if(store.data)$('timer-section').scrollIntoView?.({block:'start',behavior:'auto'});
+});
+$('choose-world').addEventListener('click',()=>chooseGeography('WORLD','World'));
+$('choose-australia').addEventListener('click',()=>chooseGeography('AUS','Australia'));
 document.addEventListener('visibilitychange', () => { paint(); if (!document.hidden && performance.now() - lastAttempt >= POLL_MS) refresh(); });
 setInterval(() => { if (clock.running) paint(); }, 1000);
 setInterval(() => { if (performance.now() - lastAttempt >= POLL_MS) refresh(); }, POLL_MS);

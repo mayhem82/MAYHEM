@@ -24,6 +24,6 @@ test('all fixed UI controls have unique HTML targets and declared local assets e
   }
   for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
     if(match[1].startsWith('https:') || match[1]==='./')continue;
-    assert.ok((await stat(path.resolve(root,match[1]))).isFile());
+    assert.ok((await stat(path.resolve(root,match[1].split('?')[0]))).isFile());
   }
 });

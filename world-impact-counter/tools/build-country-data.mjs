@@ -100,4 +100,5 @@ root.version='2026-10-27.2-countries';root.countries=countries;root.countryCover
 validateDataset(root);
 await writeFile(new URL('../data/indicators.json',import.meta.url),JSON.stringify(root,null,2)+'\n');
 await writeFile(new URL('../data/source-manifest.json',import.meta.url),JSON.stringify(manifest,null,2)+'\n');
+await import('./render-country-list.mjs');
 console.log(JSON.stringify({coverage,australia:byId.get('AUS').indicators.map(item=>({id:item.id,annualRate:item.annualRate,period:item.ratePeriod})),australiaExpansion:byId.get('AUS').observations,excluded:definitionExclusions},null,2));
