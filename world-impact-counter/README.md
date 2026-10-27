@@ -30,6 +30,8 @@ Retain and copy the ordinary source files in this folder. Source is `index.html`
 
 Each flow has its own quantity gauge with real units and an automatically expanding decimal axis. These are amount axes, not severity thresholds or percentages of an overall score. The needle can move back when the axis expands; accrued totals remain continuous. Metric colors distinguish indicators; separate text labels convey trends.
 
+Small-text readability baseline, 2026-10-27: all 29 explicit 8-15px font declarations from commit `a52cd609` were increased by exactly 4 CSS pixels, using fixed absolute sizes. Large headings, gauge numerals and icons retain their original sizes. `test/fixtures/styles.before-readability.css` records the prior CSS; `test/readability.test.mjs` guards against repeated increments and preserves narrow-width reflow rules. Labels may wrap and the controls stack at 360px and below. These source checks do not replace browser layout acceptance, which remains blocked.
+
 ## Verification limits
 
 Automated tests cover timing, rate changes, validation and retained-data failure/recovery. Browser integration, actual browser CORS, mobile visual QA and public deployment must be verified separately before calling the app production-ready.
