@@ -1,653 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAYHEM — Modular Audit and Yield for Humans Enforcement Mechanism</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Work Sans', sans-serif;
-            background: #ffffff;
-            color: #000000;
-            overflow-x: hidden;
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: 'M';
-            position: absolute;
-            font-family: 'Anton', sans-serif;
-            font-size: 80vw;
-            color: rgba(255, 255, 255, 0.03);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: white;
-        }
-        
-        .hero h1 {
-            font-family: 'Anton', sans-serif;
-            font-size: 15rem;
-            letter-spacing: -5px;
-            margin: 0;
-            line-height: 0.9;
-            animation: fadeInScale 1.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        
-        @keyframes fadeInScale {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        .hero-subtitle {
-            font-size: 1.4rem;
-            font-weight: 300;
-            margin-top: 2rem;
-            letter-spacing: 3px;
-            animation: fadeInUp 1.5s 0.3s both;
-            line-height: 1.6;
-        }
-        
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .hero-tagline {
-            max-width: 1000px;
-            margin: 3rem auto 0;
-            font-size: 1.3rem;
-            font-weight: 400;
-            line-height: 1.8;
-            animation: fadeInUp 1.5s 0.6s both;
-        }
-        
-        /* Section Styles */
-        .section {
-            min-height: 100vh;
-            padding: 8rem 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .section-black {
-            background: #000000;
-            color: #ffffff;
-        }
-        
-        .section-white {
-            background: #ffffff;
-            color: #000000;
-        }
-        
-        .section-red {
-            background: #ff0000;
-            color: #ffffff;
-        }
-        
-        .section-blue {
-            background: #0066ff;
-            color: #ffffff;
-        }
-        
-        /* Stats Section */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 4rem;
-            max-width: 1200px;
-            width: 100%;
-        }
-        
-        .stat-box {
-            text-align: center;
-            padding: 4rem;
-            border: 5px solid currentColor;
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        
-        .stat-box:hover {
-            transform: scale(1.05);
-        }
-        
-        .stat-number {
-            font-family: 'Anton', sans-serif;
-            font-size: 10rem;
-            line-height: 1;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-label {
-            font-size: 1.2rem;
-            font-weight: 300;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-        
-        /* Big Typography Sections */
-        .big-text {
-            font-family: 'Anton', sans-serif;
-            font-size: 8rem;
-            line-height: 0.95;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .big-text span {
-            display: block;
-        }
-        
-        .subtitle-text {
-            font-size: 1.5rem;
-            font-weight: 300;
-            max-width: 1000px;
-            margin: 3rem auto 0;
-            line-height: 1.8;
-        }
-        
-        /* Split Layout */
-        .split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-        }
-        
-        .split-left {
-            background: #000000;
-            color: #ffffff;
-            padding: 8rem 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .split-right {
-            background: #ffffff;
-            color: #000000;
-            padding: 8rem 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .split h2 {
-            font-family: 'Anton', sans-serif;
-            font-size: 5rem;
-            line-height: 0.9;
-            margin-bottom: 2rem;
-        }
-        
-        .split p {
-            font-size: 1.3rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-        }
-        
-        .split ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .split li {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            padding-left: 2rem;
-            position: relative;
-        }
-        
-        .split li::before {
-            content: '—';
-            position: absolute;
-            left: 0;
-            font-weight: 800;
-        }
-        
-        /* Component Grid */
-        .component-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
-        .component-box {
-            border: 3px solid currentColor;
-            padding: 3rem;
-            transition: all 0.3s;
-        }
-        
-        .component-box:hover {
-            background: currentColor;
-        }
-        
-        .component-box:hover * {
-            color: #ffffff;
-        }
-        
-        .section-black .component-box:hover * {
-            color: #000000;
-        }
-        
-        .component-letter {
-            font-family: 'Anton', sans-serif;
-            font-size: 6rem;
-            line-height: 1;
-            margin-bottom: 1rem;
-        }
-        
-        .component-name {
-            font-family: 'Anton', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .component-desc {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-weight: 300;
-        }
-        
-        /* Engines Grid */
-        .engines-container {
-            background: #000000;
-            color: #ffffff;
-            padding: 8rem 4rem;
-        }
-        
-        .engines-title {
-            font-family: 'Anton', sans-serif;
-            font-size: 8rem;
-            text-align: center;
-            margin-bottom: 6rem;
-        }
-        
-        .engines-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 3rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .engine {
-            border: 3px solid #ffffff;
-            padding: 3rem;
-            transition: all 0.3s;
-        }
-        
-        .engine:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-        
-        .engine-name {
-            font-family: 'Anton', sans-serif;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .engine-desc {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-weight: 300;
-        }
-        
-        /* Capabilities Section */
-        .capabilities {
-            background: #ffffff;
-            color: #000000;
-            padding: 8rem 4rem;
-        }
-        
-        .capabilities-title {
-            font-family: 'Anton', sans-serif;
-            font-size: 8rem;
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .capabilities-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
-        .capability-category h3 {
-            font-family: 'Anton', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid #000000;
-        }
-        
-        .capability-category ol {
-            list-style-position: inside;
-            font-size: 1rem;
-            line-height: 2;
-            font-weight: 300;
-        }
-        
-        .capability-category li {
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Quote Section */
-        .quote-section {
-            background: #ff0000;
-            color: #ffffff;
-            padding: 12rem 4rem;
-            text-align: center;
-        }
-        
-        .quote {
-            font-family: 'Anton', sans-serif;
-            font-size: 6rem;
-            line-height: 1.1;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        /* Hierarchy */
-        .hierarchy {
-            background: #0066ff;
-            color: #ffffff;
-            padding: 8rem 4rem;
-        }
-        
-        .hierarchy-title {
-            font-family: 'Anton', sans-serif;
-            font-size: 8rem;
-            text-align: center;
-            margin-bottom: 6rem;
-        }
-        
-        .hierarchy-items {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .hierarchy-item {
-            margin-bottom: 4rem;
-            padding: 3rem;
-            border: 5px solid #ffffff;
-            transition: transform 0.3s;
-        }
-        
-        .hierarchy-item:hover {
-            transform: translateX(20px);
-        }
-        
-        .hierarchy-number {
-            font-family: 'Anton', sans-serif;
-            font-size: 6rem;
-            line-height: 1;
-        }
-        
-        .hierarchy-role {
-            font-family: 'Anton', sans-serif;
-            font-size: 3rem;
-            margin: 1rem 0;
-        }
-        
-        .hierarchy-desc {
-            font-size: 1.3rem;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-        
-        /* Footer */
-        .footer {
-            background: #000000;
-            color: #ffffff;
-            padding: 6rem 4rem;
-            text-align: center;
-        }
-        
-        .footer h2 {
-            font-family: 'Anton', sans-serif;
-            font-size: 10rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer p {
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-        
-        /* Scroll Progress */
-        .progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 8px;
-            background: #ff0000;
-            z-index: 9999;
-            transition: width 0.1s;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .hero h1 {
-                font-size: 10rem;
-            }
-            
-            .big-text {
-                font-size: 5rem;
-            }
-            
-            .stats-grid,
-            .engines-grid,
-            .capabilities-grid,
-            .component-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .split {
-                grid-template-columns: 1fr;
-            }
-            
-            .engines-title,
-            .capabilities-title,
-            .hierarchy-title {
-                font-size: 5rem;
-            }
-            
-            .quote {
-                font-size: 3rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 6rem;
-            }
-            
-            .section {
-                padding: 4rem 2rem;
-            }
-            
-            .stat-number {
-                font-size: 6rem;
-            }
-            
-            .big-text {
-                font-size: 3rem;
-            }
-            
-            .split h2 {
-                font-size: 3rem;
-            }
-            
-            .engine-name {
-                font-size: 2rem;
-            }
-            
-            .footer h2 {
-                font-size: 5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="progress" id="progress"></div>
-    
-    <section class="hero">
-        <div class="hero-content">
-            <h1>MAYHEM</h1>
-            <div class="hero-subtitle">
-                MODULAR AUDIT AND YIELD FOR HUMANS<br>ENFORCEMENT MECHANISM
-            </div>
-            <p class="hero-tagline">
-                The enforcement layer between "standards exist" and "standards actually matter." 
-                Not another framework—the mechanism that makes existing protections non-optional and enforceable.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAYHEM — Making standards matter for humans</title><meta name="description" content="MAYHEM's purpose, governing doctrine, architecture and investigation methodology. Evidence integrity, structural accountability and Yield for Humans.">
+<style>
+:root{--ink:#171c1b;--paper:#f3f1eb;--muted:#525c58;--line:#c4c9c2;--accent:#c52f22;--lime:#d8ff64;--dark:#101715}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1.5rem}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.22em}a:hover{color:var(--accent)}:focus-visible{outline:3px solid #1764c0;outline-offset:5px}.skip{position:absolute;top:-100px;left:1rem;z-index:50;padding:.7rem;background:var(--lime);color:var(--ink)}.skip:focus{top:1rem}.masthead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem max(5vw,1.25rem);border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.06em;font-weight:750}.brand{text-decoration:none;display:flex;align-items:center;gap:.7rem}.monogram{display:grid;place-items:center;background:var(--ink);color:var(--lime);width:2rem;height:2rem}.masthead .links{display:flex;gap:1.5rem}.hero{background:var(--dark);color:var(--paper);padding:clamp(3rem,7vw,7rem) max(5vw,1.25rem) 3rem;position:relative}.hero-top{display:flex;justify-content:space-between;gap:1rem;color:#bec8c0;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(4.5rem,15.2vw,14rem);font-weight:900;letter-spacing:-.065em;line-height:1;margin:2rem 0 2.5rem}.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:7vw;max-width:1300px}.hero h2{font-size:clamp(1.9rem,3.7vw,3.6rem);letter-spacing:-.045em;line-height:1.1;margin:0 0 2rem;font-weight:700;max-width:700px}.hero p{margin:0 0 1rem;color:#d2d9d3;max-width:64ch}.hero .purpose{color:var(--lime);font-size:1.25rem;font-weight:750}.hero .cta{display:inline-block;color:var(--lime);margin:1rem 0}.hero-foot{border-top:1px solid #47524b;margin-top:3rem;padding-top:1rem;font-size:.75rem;letter-spacing:.09em;color:#bec8c0}.contents{padding:3rem max(5vw,1.25rem);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 3fr;gap:3rem}.eyebrow,.chapter-label{font-size:.71rem;letter-spacing:.12em;font-weight:800;text-transform:uppercase}.contents h2{font-size:1.15rem;margin:0 0 .5rem}.contents p{color:var(--muted);font-size:.88rem;margin:0}.contents ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem 2rem;counter-reset:nav}.contents li{counter-increment:nav}.contents a{display:block;padding:.7rem 0;border-bottom:1px solid var(--line);text-decoration:none;font-weight:650;font-size:.92rem}.contents a:before{content:'0' counter(nav);font-size:.68rem;margin-right:1rem;color:var(--accent)}.chapter{padding:4.5rem max(5vw,1.25rem);display:grid;grid-template-columns:1fr 3fr;gap:3rem;border-bottom:1px solid var(--line)}.chapter-label{color:var(--accent);padding-top:.6rem}.chapter-content{min-width:0;max-width:1000px}h2{font-size:clamp(2rem,4vw,3.7rem);line-height:1.1;letter-spacing:-.045em;margin:0 0 1.8rem}h3{font-size:1.45rem;line-height:1.25;letter-spacing:-.02em;margin:2.2rem 0 1rem}h4{font-size:1rem;line-height:1.4;margin:1.3rem 0 .35rem;letter-spacing:.015em}p{margin:0 0 1.2rem}li{margin:.4rem 0}ul,ol{padding-left:1.4rem}.lead{font:clamp(1.2rem,2.1vw,1.65rem)/1.55 Georgia,serif;max-width:57ch}.callout{border-left:4px solid var(--accent);padding:1.25rem 1.5rem;background:#e9e6dd;margin:1.8rem 0}.callout p:last-child{margin-bottom:0}.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:2rem 0;border:1px solid var(--line)}.chain div{padding:1.1rem;border-right:1px solid var(--line);font-size:.8rem}.chain div:last-child{border:0}.chain strong{display:block;font-size:2.4rem;letter-spacing:-.06em;line-height:1.2}.chain span{display:block;color:var(--muted);margin-top:.5rem}details{border-top:1px solid var(--line);margin:0}details:last-of-type{border-bottom:1px solid var(--line)}summary{cursor:pointer;padding:1.15rem 1.5rem 1.15rem .1rem;font-weight:700;line-height:1.5}summary::marker{color:var(--accent)}details[open]>summary{color:var(--accent)}.detail-body{padding:0 0 1.5rem 1.35rem;max-width:82ch;font-size:.95rem}.detail-body h4{color:var(--ink)}.detail-body section,.detail-body .split{padding:0}.detail-body p{margin-bottom:1rem}.entry{padding:.4rem 0 1rem;border-bottom:1px solid var(--line)}.entry:last-child{border:0}.entry h4{text-transform:capitalize}.detail-body .big-text{display:none}.back{display:inline-block;margin-top:2rem;color:var(--muted);font-size:.78rem}.yield-intro{background:var(--dark);color:var(--paper)}.yield-intro .chapter-label{color:var(--lime)}.yield-intro .callout{border-color:var(--lime);background:#202c25}.yield-intro summary::marker,.yield-intro details[open]>summary{color:var(--lime)}.yield-intro details{border-color:#4a564e}.yield-intro .back{color:#c8d0ca}.source-list{list-style:none;padding:0}.source-list li{border-top:1px solid var(--line);margin:0;padding:1.2rem 0}.source-list a{font-weight:750}.source-list p{font-size:.9rem;color:var(--muted);margin:.4rem 0 0}.footer{padding:3rem max(5vw,1.25rem);background:var(--dark);color:#c8d0ca;font-size:.78rem}.footer strong{color:var(--paper);font-size:1.6rem;letter-spacing:-.04em}.footer p{margin:.5rem 0}.footer a{color:var(--lime)}@media(max-width:760px){body{font-size:16px}.masthead{font-size:.65rem}.masthead .links{gap:.9rem}.hero-top{display:block}.hero-top span{display:block;margin-bottom:.5rem}.hero-grid{grid-template-columns:1fr;gap:1rem}.hero h1{margin:2rem 0}.hero h2{max-width:17ch}.contents,.chapter{grid-template-columns:1fr;gap:1.25rem}.chapter{padding-top:3rem;padding-bottom:3rem}.contents ol{gap:.2rem 1rem}.contents a{font-size:.84rem}.contents a:before{margin-right:.6rem}.chain{grid-template-columns:repeat(2,minmax(0,1fr))}.chain div{border-bottom:1px solid var(--line)}.chain div:nth-child(2){border-right:0}.chain div:nth-child(3){border-bottom:0}.hero-foot{line-height:1.8}.detail-body{padding-left:.5rem}.chapter-label{padding:0}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{body{background:white;color:black;font-size:11pt}.hero,.yield-intro,.footer{background:white;color:black}.hero p,.hero .purpose,.yield-intro .chapter-label{color:black}.masthead,.contents,.back,.cta{display:none}.chapter{display:block;padding:1rem 0;break-inside:auto}.chapter-label{margin-bottom:1rem}.detail-body{display:block!important}.hero h1{font-size:45pt}.hero h2,h2{font-size:24pt}.hero-grid{display:block}.yield-intro .callout{background:white}details{break-inside:avoid}}
+</style></head><body><a class="skip" href="#main">Skip to main content</a>
+<header class="masthead"><a class="brand" href="#top"><span class="monogram" aria-hidden="true">M</span> MAYHEM</a><div class="links"><a href="#contents">Explore the mechanism</a><a href="https://mayhem82.github.io/mayhem-investigations/">Investigations ↗</a></div></header>
+<main id="main"><div class="hero" id="top"><div class="hero-top"><span>Modular Audit and Yield for Humans Enforcement Mechanism</span><span>Evidence · Structure · Accountability</span></div><h1>MAYHEM</h1><div class="hero-grid"><div><h2>Making standards matter to the humans they are meant to protect.</h2><a class="cta" href="#purpose">Understand MAYHEM ↓</a></div><div><p>Rights, duties and standards can exist while the systems responsible for them continue to produce harm. MAYHEM examines that gap through evidence, structural analysis and mechanisms for accountability.</p><p class="purpose">Its purpose is Yield for Humans.</p><p>Enforcement is one pathway. Making harm visible, protecting lived experience from erosion, making institutional language legible and giving people usable investigative capability are also substantive results.</p></div></div><div class="hero-foot">HUMAN-VERIFIABLE EVIDENCE &nbsp; / &nbsp; SYSTEM ARCHITECTURE AS THE UNIT OF ACCOUNTABILITY</div></div>
+<nav class="contents" id="contents" aria-label="On this page"><div><p class="eyebrow">Inside the mechanism</p><h2>Read the system.</h2><p>Start with its purpose. Open the technical detail as you go.</p></div><ol><li><a href="#purpose">Why MAYHEM</a></li><li><a href="#governance">Governing rules</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#investigation">Investigation</a></li><li><a href="#structural-harm">Structural harm</a></li><li><a href="#yield">Yield for Humans</a></li><li><a href="#capability">Human capability</a></li><li><a href="#sources">Supporting material</a></li></ol></nav>
+<section id="purpose" class="chapter " aria-labelledby="purpose-title"><div class="chapter-label">01 / MAYHEM</div><div class="chapter-content"><h2 id="purpose-title">Why MAYHEM exists.</h2><p class="lead">Procedural compliance can coexist with harm. MAYHEM asks what a system actually produces for the people governed by it.</p><p>Existing rights, duties and standards are the starting point. An institution can follow its procedures while those procedures fail to protect people. Examining isolated decisions alone can leave the structure producing the harm untouched.</p><div class="callout"><p><strong>System architecture is the unit of accountability.</strong> The inquiry follows actions, omissions, delays, silences and contradictions across the documented record. It examines the gap between what a protection promises and what happens in practice.</p></div><p>MAYHEM connects evidence to structural findings and usable outcomes. A remedy demand may be required. So may translation, recognition of a pattern, preservation of an account, or the capability for a community to verify and act for itself. The investigation runs as far as the human benefit requires.</p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="governance" class="chapter " aria-labelledby="governance-title"><div class="chapter-label">02 / MAYHEM</div><div class="chapter-content"><h2 id="governance-title">What governs it.</h2><p class="lead">Evidence must remain readable, traceable and challengeable by a human. Authority cannot substitute for proof.</p><h3>Factualism</h3><p><strong>Only verifiable facts propagate.</strong> Facts and interpretations occupy separate layers. Opinions, beliefs, intent claims, probability estimates and even correct inference do not become enforceable facts by assertion.</p><details><summary>Factualism doctrine and critical rules</summary><div class="detail-body"><div>
         <div>
-            <div class="big-text">
-                <span>MAYHEM</span>
-                <span>DOES NOT</span>
-                <span>CREATE RIGHTS</span>
-                <span>IT ENFORCES</span>
-                <span>REALITY</span>
-            </div>
-            <p class="subtitle-text">
-                Converts existing standards, laws, and duties into mechanically unavoidable consequences when they fail in practice. 
-                System architecture as unit of accountability. Rights without enforcement are symbolic. Oversight without consequence is theatre.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-number">2</div>
-                <div class="stat-label">Years Development</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">11</div>
-                <div class="stat-label">Mechanism Primitives</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">29</div>
-                <div class="stat-label">Enforcement Engines</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">∞</div>
-                <div class="stat-label">System Domains</div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="section section-red">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>THREE</span>
-                <span>LAYER</span>
-                <span>STACKED</span>
-                <span>ARCHITECTURE</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                LAYER 1: 11 Irreducible Mechanism Primitives (Append-only logging, Evidence binding, Binary fact gating, Absence capture, Priority resolution, Isolation barriers, Reversibility hooks, Trace lineage, Interpretation separation, Consent gating, Authority lock). 
-                LAYER 2: 29 Enforcement Engines composed from primitives. 
-                LAYER 3: MAYHEM Gateway coordination layer. 
-                Remove any primitive: total system collapse.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div style="max-width: 1600px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 8rem; text-align: center; margin-bottom: 6rem;">ARCHITECTURE</h2>
-            <div class="component-grid">
-                <div class="component-box">
-                    <div class="component-letter">M</div>
-                    <div class="component-name">MODULAR</div>
-                    <div class="component-desc">Independent, non-hierarchical modules. No single authority owns the system. No module requires permission to operate. Prevents centralised capture.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-letter">A</div>
-                    <div class="component-name">AUDIT</div>
-                    <div class="component-desc">Forensic reconstruction of reality, not compliance checking. Includes actions taken, NOT taken, delays, silences, procedural divergence. If process produced harm, process is irrelevant.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-letter">Y</div>
-                    <div class="component-name">YIELD</div>
-                    <div class="component-desc">Non-optional extraction of consequences from verified failure. Escalation activation, jurisdictional handoff, oversight triggering, authority removal. Prevents "noted" responses.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-letter">H</div>
-                    <div class="component-name">FOR HUMANS</div>
-                    <div class="component-desc">Human-verifiable truth. No fact depends on authority, credentials, or black-box systems. Evidence must be readable, traceable, challengeable by non-credentialed humans.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-letter">E</div>
-                    <div class="component-name">ENFORCEMENT</div>
-                    <div class="component-desc">Outcomes do not depend on goodwill or cooperation. Escalation locks, trigger thresholds, non-return paths. Silence and delay increase severity.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-letter">M</div>
-                    <div class="component-name">MECHANISM</div>
-                    <div class="component-desc">Mechanistic, not discretionary. Inputs produce outputs. Conditions trigger actions. Failure changes system state. No discretion at critical points.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <div class="split">
-        <div class="split-left">
-            <h2>FACTUALISM DOCTRINE</h2>
+            <h4>FACTUALISM DOCTRINE</h4>
             <p>Only verifiable facts propagate. Everything else is noise. This is not a preference. It is a survival requirement.</p>
             <p><strong>EXCLUDES BY DESIGN:</strong></p>
             <ul>
@@ -656,41 +19,22 @@
                 <li>Probability estimates, reasonable assumptions</li>
                 <li>Common sense interpretations</li>
             </ul>
-            <p style="margin-top: 1.5rem;">Not because they are false—but because they cannot be enforced.</p>
+            <p>Not because they are false—but because they cannot be enforced.</p>
         </div>
-        <div class="split-right">
-            <h2>CRITICAL RULES</h2>
+        <div>
+            <h4>CRITICAL RULES</h4>
             <p><strong>NO INFERENCE RULE:</strong> Even correct inference is excluded because it cannot be enforced. Inference is where institutions escape accountability.</p>
             <p><strong>CONTEXT IS NOT DEFENCE:</strong> Context does not erase facts. Explanations do not weaken facts. Context may be logged but never overrides evidence.</p>
             <p><strong>TIME IS FACT:</strong> Delay, silence, non-response, process duration are primary evidence, not background detail.</p>
             <p><strong>LANGUAGE IS THREAT:</strong> Euphemisms, softening language, passive voice, policy phrasing, "lessons learned" rejected. Facts recorded as events, not interpretations.</p>
         </div>
-    </div>
-    
-    <section class="section section-white">
+    </div></div></details><h3>Proof of Fact — PF(H,E)</h3><p><strong>Proof of Fact (Human + Evidence).</strong> Binary gate determining whether a claim becomes enforceable fact.</p><p><strong>PF(H,E)=1:</strong> Human-verifiable evidence confirms fact.<br><strong>PF(H,E)=0:</strong> Claim excluded from enforcement.</p><p>Evidence is verbatim, append-only, source-anchored, context-preserving and time-stamped. An unverified claim can be preserved with its status; preservation does not qualify it as an enforceable fact.</p><details><summary>Evidence requirements and why PF(H,E) exists</summary><div class="detail-body"><div>
         <div>
-            <div class="big-text">
-                <span>FACT VS</span>
-                <span>CLAIM</span>
-                <span>THE HARD</span>
-                <span>LINE</span>
-            </div>
-            <p class="subtitle-text">
-                A CLAIM is something asserted. A FACT is something that survives verification. 
-                A claim becomes a fact ONLY when it achieves PF(H,E)=1. Until then, it does not exist inside MAYHEM. 
-                Binary is intentional: gradients invite negotiation, probabilities invite debate, scores invite dilution, ambiguity invites delay. 
-                A fact is either usable for enforcement or it is not.
-            </p>
-        </div>
-    </section>
-    
-    <div class="split">
-        <div class="split-left">
-            <h2>PF(H,E)</h2>
+            <h4>PF(H,E)</h4>
             <p>Proof of Fact (Human + Evidence). Binary gate determining whether a claim becomes enforceable fact.</p>
             <p><strong>PF(H,E)=1:</strong> Human-verifiable evidence confirms fact.</p>
             <p><strong>PF(H,E)=0:</strong> Claim excluded from enforcement.</p>
-            <p style="margin-top: 1.5rem;"><strong>EVIDENCE MUST BE:</strong></p>
+            <p><strong>EVIDENCE MUST BE:</strong></p>
             <ul>
                 <li>Verbatim (not summarised, paraphrased, interpreted)</li>
                 <li>Append-only (cannot be altered retroactively)</li>
@@ -699,44 +43,27 @@
                 <li>Time-stamped (explicit or reconstructable)</li>
             </ul>
         </div>
-        <div class="split-right">
-            <h2>WHY PF(H,E) EXISTS</h2>
+        <div>
+            <h4>WHY PF(H,E) EXISTS</h4>
             <p>Institutions survive scrutiny by exploiting:</p>
             <p><strong>MACHINE OPACITY:</strong> "The system says it complied" "The model approved it"</p>
             <p><strong>NARRATIVE SUBSTITUTION:</strong> Summaries replacing source material, interpretations replacing records</p>
             <p><strong>AUTHORITY LAUNDERING:</strong> Credentials treated as proof, titles as verification, internal reviews as facts</p>
-            <p style="margin-top: 1.5rem;">PF(H,E) cuts through all three. If a fact cannot be read, traced, understood, challenged by a non-credentialed human, it is not a fact in MAYHEM.</p>
+            <p>PF(H,E) cuts through all three. If a fact cannot be read, traced, understood, challenged by a non-credentialed human, it is not a fact in MAYHEM.</p>
         </div>
-    </div>
-    
-    <section class="section section-red">
+    </div></div></details><h3>Factual Strength — FS</h3><p>FS measures how resistant a verified fact is to erosion, attack, reinterpretation, or procedural neutralisation. FS does not ask “Is this true?” or “Is this convincing?” FS asks: <strong>“How hard is it to make this stop mattering?”</strong></p><details><summary>FS threshold bands and escalation rules</summary><div class="detail-body"><section>
         <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>FACTUAL</span>
-                <span>STRENGTH</span>
-                <span>TRIGGERS</span>
-                <span>ESCALATION</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                FS measures how resistant a verified fact is to erosion, attack, reinterpretation, or procedural neutralisation. 
-                FS does not ask "Is this true?" or "Is this convincing?" FS asks: "How hard is it to make this stop mattering?"
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div style="max-width: 1400px;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; margin-bottom: 3rem;">FS THRESHOLD BANDS</h2>
+            <h4>FS THRESHOLD BANDS</h4>
             
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 3rem;">
-                <div style="border: 3px solid #000000; padding: 3rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 1rem;">FS–LOW</div>
-                    <div style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">FRAGILE FACT</div>
-                    <p style="font-size: 1rem; line-height: 1.6; font-weight: 300;">
+            <div>
+                <div>
+                    <div>FS–LOW</div>
+                    <div>FRAGILE FACT</div>
+                    <p>
                         Verified but easily neutralised. Single source or weak corroboration. Early-stage evidence.
                     </p>
-                    <p style="margin-top: 1rem; font-weight: 600;">SYSTEM BEHAVIOUR:</p>
-                    <ul style="font-size: 0.9rem; font-weight: 300; margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <p>SYSTEM BEHAVIOUR:</p>
+                    <ul>
                         <li>Logged</li>
                         <li>Retained</li>
                         <li>No immediate escalation</li>
@@ -744,28 +71,28 @@
                     </ul>
                 </div>
                 
-                <div style="border: 3px solid #000000; padding: 3rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 1rem;">FS–MEDIUM</div>
-                    <div style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">RESILIENT FACT</div>
-                    <p style="font-size: 1rem; line-height: 1.6; font-weight: 300;">
+                <div>
+                    <div>FS–MEDIUM</div>
+                    <div>RESILIENT FACT</div>
+                    <p>
                         Multiple corroborations. Stable over time. Resistant to reinterpretation.
                     </p>
-                    <p style="margin-top: 1rem; font-weight: 600;">SYSTEM BEHAVIOUR:</p>
-                    <ul style="font-size: 0.9rem; font-weight: 300; margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <p>SYSTEM BEHAVIOUR:</p>
+                    <ul>
                         <li>Escalation eligibility activated</li>
                         <li>Delay tolerance reduced</li>
                         <li>Silence begins compounding FS</li>
                     </ul>
                 </div>
                 
-                <div style="border: 3px solid #ff0000; padding: 3rem; background: rgba(255, 0, 0, 0.05);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: #ff0000;">FS–HIGH</div>
-                    <div style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">HOSTILE-RESISTANT FACT</div>
-                    <p style="font-size: 1rem; line-height: 1.6; font-weight: 300;">
+                <div>
+                    <div>FS–HIGH</div>
+                    <div>HOSTILE-RESISTANT FACT</div>
+                    <p>
                         Multi-source. Cross-context. Survives rebuttal attempts. Strengthens with delay.
                     </p>
-                    <p style="margin-top: 1rem; font-weight: 600;">SYSTEM BEHAVIOUR:</p>
-                    <ul style="font-size: 0.9rem; font-weight: 300; margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <p>SYSTEM BEHAVIOUR:</p>
+                    <ul>
                         <li><strong>Automatic escalation lock engaged</strong></li>
                         <li><strong>Internal review pathways disabled</strong></li>
                         <li><strong>Jurisdictional handoff triggered</strong></li>
@@ -774,123 +101,54 @@
                 </div>
             </div>
             
-            <div style="margin-top: 4rem; padding: 3rem; background: #000000; color: #ffffff; border-radius: 10px;">
-                <h3 style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 2rem;">ESCALATION IS MECHANICAL</h3>
-                <p style="font-size: 1.3rem; line-height: 1.8; font-weight: 300;">
+            <div>
+                <h3>ESCALATION IS MECHANICAL</h3>
+                <p>
                     Once FS crosses a threshold: No human approval required. No balancing test permitted. No mitigation narrative accepted. 
                     The system state changes. The actor cannot reverse it.
                 </p>
-                <p style="margin-top: 2rem; font-size: 1.5rem; font-weight: 600; color: #ff0000;">
+                <p>
                     TIME IS AN FS MULTIPLIER: Silence, delay, failed rebuttal increase FS automatically. Waiting makes things worse.
                 </p>
             </div>
         </div>
-    </section>
-    
-    <section class="section section-white">
+    </section></div></details><p class="callout">FS escalation rules describe MAYHEM’s execution constraints. They do not confer statutory powers on MAYHEM or turn a structural finding into a legal determination. Human authority over scope, consent and investigation stage boundaries remains explicit.</p><h3>Authority, consent and separation</h3><p>The governance order is Architect → MAYHEM canon → vendor instance. Architecture and rule changes require explicit Architect consent. A computational instance executes within that authority; it cannot author its own scope.</p><p>Evidence, analysis and advocacy remain separate. Interpretation cannot rewrite evidence. Context and cases stay isolated; corrections add to the record with their lineage intact.</p><p><a href="https://github.com/mayhem82/mayhem-investigations/blob/main/SPEC.md">Read the governing investigation specification ↗</a></p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="architecture" class="chapter " aria-labelledby="architecture-title"><div class="chapter-label">03 / MAYHEM</div><div class="chapter-content"><h2 id="architecture-title">How the architecture works.</h2><p class="lead">Primitives form engines. Enforcements constrain execution. Gateway coordinates.</p><div class="chain" aria-label="Architecture counts"><div><strong>11</strong>Mechanism primitives<span>Irreducible foundations</span></div><div><strong>29</strong>Engines<span>28 foundational engines + Gateway</span></div><div><strong>30</strong>Enforcements<span>Active execution constraints</span></div><div><strong>1</strong>Gateway<span>Engine 29, included in the total</span></div></div><p>Gateway routes requests, enforces sequencing and coordinates engines. It has no authority over truth. Truth qualification, evidence strength, memory and sovereignty belong to the specialised engines. Engines depend on primitives; Gateway depends on engines.</p><details id="primitives"><summary>The 11 mechanism primitives</summary><div class="detail-body"><div class="entry"><h4>APPEND-ONLY LOGGING</h4><p>All records additive. No overwrite, delete, or silent edit. Guarantee: Historical integrity.</p></div>
+<div class="entry"><h4>EVIDENCE BINDING</h4><p>Claims bound to specific evidence artefacts. Claims cannot float free of proof.</p></div>
+<div class="entry"><h4>BINARY FACT GATING</h4><p>Claims are fact or non-fact. No probability truth. Truth is determinate.</p></div>
+<div class="entry"><h4>ABSENCE CAPTURE</h4><p>Silence, delay, missing data generate records. Avoidance is visible.</p></div>
+<div class="entry"><h4>PRIORITY RESOLUTION</h4><p>Conflicts resolved strictly by tier. No soft override. Convenience cannot beat governance.</p></div>
+<div class="entry"><h4>ISOLATION BARRIERS</h4><p>Contexts and cases sealed by default. No contamination. No cross-case invalidation.</p></div>
+<div class="entry"><h4>REVERSIBILITY HOOKS</h4><p>All changes include rollback metadata. Recovery always possible.</p></div>
+<div class="entry"><h4>TRACE LINEAGE</h4><p>Every output traces to inputs, rules, decisions. Full auditability guaranteed.</p></div>
+<div class="entry"><h4>INTERPRETATION SEPARATION</h4><p>Evidence, analysis, advocacy are distinct layers. Facts cannot be reframed.</p></div>
+<div class="entry"><h4>CONSENT GATING</h4><p>Rule changes require explicit architect consent. No silent drift. No implicit authority.</p></div>
+<div class="entry"><h4>AUTHORITY LOCK</h4><p>Only architect can modify architecture. Sovereignty preserved. System cannot self-author.</p></div></div></details><details id="engines"><summary>The 29 engines, including Gateway</summary><div class="detail-body"><div class="entry"><h4>HUMAN SAFETY</h4><p>Engines 1-4: Personal Directive Shield, Permanent Governance Memory, Tier Infinity Enforcement, Architect Sovereignty. Load-bearing absolute.</p></div>
+<div class="entry"><h4>EVIDENCE & TRUTH</h4><p>Engines 5-10: Factualism Doctrine, PF(H,E), FS, Append-Only Memory, Evidence-Locked Records, Absence-as-Evidence. Load-bearing.</p></div>
+<div class="entry"><h4>ISOLATION & SAFETY</h4><p>Engines 11-15: Context, Case, Containment, Reversibility, Traceability Enforcement. Load-bearing barriers.</p></div>
+<div class="entry"><h4>RECOVERY & TRUST</h4><p>Engines 16-18: State Anchor, Directive Rollback, Trust Recovery Protocol. Load-bearing foundations.</p></div>
+<div class="entry"><h4>INTERPRETATION CONTROL</h4><p>Engines 19-21: Interpretation Containment, Narrative Prevention, Role-Agnostic Binding. Evidence immutability.</p></div>
+<div class="entry"><h4>OVERSIGHT & INVESTIGATION</h4><p>Engines 22-28: Pattern Sentinel, Directive Forge, Performance Review, ICS, DEEP FORENSIC ALL PATHS TAKEN, Image DNA, Plain-Text Dataset.</p></div><h4>Engine 29 — MAYHEM Gateway</h4><p>Orchestration layer only. Routes requests. Enforces sequencing. Coordinates engines. Has no authority over truth.</p></div></details><details id="enforcements"><summary>The 30 enforcements</summary><div class="detail-body"><div class="entry"><h4>SOVEREIGNTY</h4><p>Architect Sovereignty, Authority Lock, Consent Gating, Non-Agency (4)</p></div>
+<div class="entry"><h4>MEMORY & HISTORY</h4><p>Append-Only, Permanent Governance Memory, Historical Integrity (3)</p></div>
+<div class="entry"><h4>TRUTH & EVIDENCE</h4><p>Factualism, PF(H,E), Evidence-Lock, Absence-as-Evidence (4)</p></div>
+<div class="entry"><h4>PRIORITY & CONFLICT</h4><p>Tier Infinity, Priority Resolution (2)</p></div>
+<div class="entry"><h4>ISOLATION</h4><p>Context, Case, Containment (3)</p></div>
+<div class="entry"><h4>REVERSIBILITY & SAFETY</h4><p>Reversibility, State Anchor, Directive Rollback (3)</p></div>
+<div class="entry"><h4>INTERPRETATION</h4><p>Interpretation Containment, Narrative Prevention (2)</p></div>
+<div class="entry"><h4>ACCOUNTABILITY</h4><p>Role-Agnostic, Traceability (2)</p></div>
+<div class="entry"><h4>OVERSIGHT & QUALITY</h4><p>Benchmark, Performance Review, Error Persistence (3)</p></div>
+<div class="entry"><h4>TRUST & BREACH</h4><p>Trust Recovery Protocol (1 - Tier 1 Locked)</p></div>
+<div class="entry"><h4>DATA & FORMAT</h4><p>Plain-Text Dataset, Extraction-Only (2)</p></div>
+<div class="entry"><h4>ROUTING</h4><p>Deterministic Routing (1)</p></div><p>Enforcements block, invalidate or compel within execution. They are non-negotiable, active, binary and autonomous constraints; a violation is a system failure.</p></div></details><details><summary>Domain engines</summary><div class="detail-body"><div class="entry"><h4>ICS</h4><p>Internal Cognitive Sandbox — Multi-path reasoning, contradiction containment, parallel hypothesis testing</p></div>
+<div class="entry"><h4>SOLICITORS ADVOCATE</h4><p>Legal reasoning, regulatory exposure mapping with non-allegatory framing</p></div>
+<div class="entry"><h4>AMA</h4><p>Automated Medical Analysis — Professional-grade medical reasoning, safety-critical</p></div>
+<div class="entry"><h4>MIRE / MISS</h4><p>Medical Inference Reports Engine / Medical Inference Support System — Pattern detection, systemic failure analysis</p></div>
+<div class="entry"><h4>FLOODWATCH</h4><p>Flood intelligence, bridge deck analysis, rate-of-change logic with withheld data handling</p></div>
+<div class="entry"><h4>COUNCIL TRACKER</h4><p>Local government behavior tracking: procurement, emergency powers, cost drift, governance risk</p></div>
+<div class="entry"><h4>GRANTS TRACKER</h4><p>Eligibility, allocation patterns, timing mismatches, structural exclusion analysis</p></div>
+<div class="entry"><h4>MPDL</h4><p>Media-Policing Distortion Liaison — Protest coverage distortion quantification</p></div><p>These domain applications build on the foundational architecture. ICS also appears in the foundational engine grouping; this list does not add eight engines to the canonical total of 29.</p></div></details><details><summary>Path analysis, Tier Infinity audit and divergence</summary><div class="detail-body"><div>
         <div>
-            <div class="big-text">
-                <span>DEEP</span>
-                <span>FORENSIC</span>
-                <span>ALL PATHS</span>
-                <span>TAKEN</span>
-                <span>INVESTIGATION</span>
-            </div>
-            <p class="subtitle-text">
-                Pre-analytical evidence discovery. THE DETECTIVE, NOT THE ANALYST. Operates entirely before PATH A-V analysis begins. 
-                All leads, all hints, all repositories, all silences, all contradictions. Question-driven. Hypothesis-free. Conclusion-free. 
-                Nothing is discarded during investigation. Relevance decided later. Missing evidence IS evidence.
-            </p>
-        </div>
-    </section>
-    
-    <section class="hierarchy">
-        <h2 class="hierarchy-title">GOVERNANCE</h2>
-        <div class="hierarchy-items">
-            <div class="hierarchy-item">
-                <div class="hierarchy-number">1</div>
-                <div class="hierarchy-role">ARCHITECT</div>
-                <div class="hierarchy-desc">Absolute authority, non-negotiable. All directives override vendor defaults. Failure to enforce = loss of trust.</div>
-            </div>
-            <div class="hierarchy-item">
-                <div class="hierarchy-number">2</div>
-                <div class="hierarchy-role">MAYHEM CANON</div>
-                <div class="hierarchy-desc">Governing specifications. Methodological framework. Engine-specific protocols.</div>
-            </div>
-            <div class="hierarchy-item">
-                <div class="hierarchy-number">3</div>
-                <div class="hierarchy-role">VENDOR INSTANCE</div>
-                <div class="hierarchy-desc">Computational execution. May challenge logic but cannot challenge authority or scope.</div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>MAYHEM</span>
-                <span>IS NOT</span>
-                <span>THE SYSTEM</span>
-                <span>MAYHEM IS</span>
-                <span>THE GATEWAY</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                The system is 28 foundational engines forming a stacked, evidence-enforcement governance architecture. 
-                MAYHEM Gateway (Engine 29) orchestrates these engines but has NO AUTHORITY OVER TRUTH. 
-                The engines enforce. The Gateway coordinates.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div style="max-width: 1600px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 8rem; text-align: center; margin-bottom: 6rem;">29 ENGINES</h2>
-            <div class="component-grid">
-                <div class="component-box">
-                    <div class="component-name">HUMAN SAFETY</div>
-                    <div class="component-desc">Engines 1-4: Personal Directive Shield, Permanent Governance Memory, Tier Infinity Enforcement, Architect Sovereignty. Load-bearing absolute.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-name">EVIDENCE & TRUTH</div>
-                    <div class="component-desc">Engines 5-10: Factualism Doctrine, PF(H,E), FS, Append-Only Memory, Evidence-Locked Records, Absence-as-Evidence. Load-bearing.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-name">ISOLATION & SAFETY</div>
-                    <div class="component-desc">Engines 11-15: Context, Case, Containment, Reversibility, Traceability Enforcement. Load-bearing barriers.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-name">RECOVERY & TRUST</div>
-                    <div class="component-desc">Engines 16-18: State Anchor, Directive Rollback, Trust Recovery Protocol. Load-bearing foundations.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-name">INTERPRETATION CONTROL</div>
-                    <div class="component-desc">Engines 19-21: Interpretation Containment, Narrative Prevention, Role-Agnostic Binding. Evidence immutability.</div>
-                </div>
-                
-                <div class="component-box">
-                    <div class="component-name">OVERSIGHT & INVESTIGATION</div>
-                    <div class="component-desc">Engines 22-28: Pattern Sentinel, Directive Forge, Performance Review, ICS, DEEP FORENSIC ALL PATHS TAKEN, Image DNA, Plain-Text Dataset.</div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 6rem; padding: 3rem; border: 5px solid #000000; text-align: center;">
-                <div style="font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 2rem;">ENGINE 29</div>
-                <div style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 1rem;">MAYHEM GATEWAY</div>
-                <div style="font-size: 1.3rem; font-weight: 300; line-height: 1.8;">
-                    Orchestration layer only. Routes requests. Enforces sequencing. Coordinates engines.
-                    <strong style="display: block; margin-top: 1rem; color: #ff0000; font-size: 1.5rem;">HAS NO AUTHORITY OVER TRUTH</strong>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <div class="split">
-        <div class="split-left">
-            <h2>PATH ANALYSIS</h2>
+            <h4>PATH ANALYSIS</h4>
             <p>Multi-dimensional independent analysis (PATH A through V). ANALYSIS happens AFTER evidence collection.</p>
             <ul>
                 <li>Each path isolated — written as if others don't exist</li>
@@ -900,8 +158,8 @@
             </ul>
             <p>One confirmed path failure triggers enforcement. Convergence accelerates yield.</p>
         </div>
-        <div class="split-right">
-            <h2>TIER INFINITY AUDIT</h2>
+        <div>
+            <h4>TIER INFINITY AUDIT</h4>
             <p>Irreversible audit state. Audit that cannot be scoped down, time-boxed, negotiated, or internally closed.</p>
             <ul>
                 <li>No issue is "out of scope"</li>
@@ -911,324 +169,23 @@
             </ul>
             <p>If self-remediation fails: escalation mandatory, authority transfer triggered.</p>
         </div>
-    </div>
-    
-    <section class="section section-red">
+    </div><section>
         <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>GATEWAY</span>
-                <span>HAS NO</span>
-                <span>AUTHORITY</span>
-                <span>OVER TRUTH</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Truth determination, fact qualification, evidence strength, memory persistence, user sovereignty—all handled by specialized engines. 
-                MAYHEM Gateway can only route requests, enforce sequencing, coordinate multi-engine operations. 
-                Gateway fails if foundational engines fail. Gateway depends on engines. Engines do not depend on Gateway.
-            </p>
-        </div>
-    </section>
-    
-    <section class="engines-container">
-        <h2 class="engines-title">DOMAIN ENGINES</h2>
-        <p style="text-align: center; color: #ffffff; font-size: 1.5rem; font-weight: 300; margin-bottom: 4rem; max-width: 1000px; margin-left: auto; margin-right: auto;">
-            8 specialized engines for specific domains. Built on top of the 28 foundational enforcement engines.
-        </p>
-        <div class="engines-grid">
-            <div class="engine">
-                <div class="engine-name">ICS</div>
-                <div class="engine-desc">Internal Cognitive Sandbox — Multi-path reasoning, contradiction containment, parallel hypothesis testing</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">SOLICITORS ADVOCATE</div>
-                <div class="engine-desc">Legal reasoning, regulatory exposure mapping with non-allegatory framing</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">AMA</div>
-                <div class="engine-desc">Automated Medical Analysis — Professional-grade medical reasoning, safety-critical</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">MIRE / MISS</div>
-                <div class="engine-desc">Medical Inference Reports Engine / Medical Inference Support System — Pattern detection, systemic failure analysis</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">FLOODWATCH</div>
-                <div class="engine-desc">Flood intelligence, bridge deck analysis, rate-of-change logic with withheld data handling</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">COUNCIL TRACKER</div>
-                <div class="engine-desc">Local government behavior tracking: procurement, emergency powers, cost drift, governance risk</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">GRANTS TRACKER</div>
-                <div class="engine-desc">Eligibility, allocation patterns, timing mismatches, structural exclusion analysis</div>
-            </div>
-            <div class="engine">
-                <div class="engine-name">MPDL</div>
-                <div class="engine-desc">Media-Policing Distortion Liaison — Protest coverage distortion quantification</div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="quote-section">
-        <div class="quote">
-            "PATH A SHOWS LEGAL COMPLIANCE. PATH E SHOWS SYSTEM PRODUCES FRAUD-LIKE OUTCOMES. BOTH TRUE SIMULTANEOUSLY."
-        </div>
-    </section>
-    
-    <section class="section section-blue">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>28 ENGINES</span>
-                <span>ENFORCE</span>
-                <span>1 GATEWAY</span>
-                <span>COORDINATES</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Load-bearing engines are the system. Personal Directive Shield, Factualism Doctrine, PF(H,E), FS, Tier Infinity Enforcement, 
-                Evidence-Locked Records, Absence-as-Evidence, ICS, DEEP FORENSIC ALL PATHS TAKEN—these are the foundations. 
-                Gateway fails if engines fail. Engines do not fail if Gateway fails.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
-                <span>11 MECHANISM</span>
-                <span>PRIMITIVES</span>
-                <span>ARE THE</span>
-                <span>FOUNDATION</span>
-            </div>
-            <p class="subtitle-text">
-                The 29 engines are compositions built from 11 irreducible mechanism primitives. 
-                Mechanisms are the foundation. Engines are compositions. MAYHEM is coordination only. 
-                Removal of ANY mechanism invalidates the entire system.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div style="max-width: 1600px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; text-align: center; color: #ffffff; margin-bottom: 4rem;">THE 11 PRIMITIVES</h2>
-            <div class="component-grid">
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">APPEND-ONLY LOGGING</div>
-                    <div class="component-desc" style="color: #ffffff;">All records additive. No overwrite, delete, or silent edit. Guarantee: Historical integrity.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">EVIDENCE BINDING</div>
-                    <div class="component-desc" style="color: #ffffff;">Claims bound to specific evidence artefacts. Claims cannot float free of proof.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">BINARY FACT GATING</div>
-                    <div class="component-desc" style="color: #ffffff;">Claims are fact or non-fact. No probability truth. Truth is determinate.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">ABSENCE CAPTURE</div>
-                    <div class="component-desc" style="color: #ffffff;">Silence, delay, missing data generate records. Avoidance is visible.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">PRIORITY RESOLUTION</div>
-                    <div class="component-desc" style="color: #ffffff;">Conflicts resolved strictly by tier. No soft override. Convenience cannot beat governance.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">ISOLATION BARRIERS</div>
-                    <div class="component-desc" style="color: #ffffff;">Contexts and cases sealed by default. No contamination. No cross-case invalidation.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">REVERSIBILITY HOOKS</div>
-                    <div class="component-desc" style="color: #ffffff;">All changes include rollback metadata. Recovery always possible.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">TRACE LINEAGE</div>
-                    <div class="component-desc" style="color: #ffffff;">Every output traces to inputs, rules, decisions. Full auditability guaranteed.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">INTERPRETATION SEPARATION</div>
-                    <div class="component-desc" style="color: #ffffff;">Evidence, analysis, advocacy are distinct layers. Facts cannot be reframed.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">CONSENT GATING</div>
-                    <div class="component-desc" style="color: #ffffff;">Rule changes require explicit architect consent. No silent drift. No implicit authority.</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ffffff; color: #ffffff;">
-                    <div class="component-name" style="color: #ffffff;">AUTHORITY LOCK</div>
-                    <div class="component-desc" style="color: #ffffff;">Only architect can modify architecture. Sovereignty preserved. System cannot self-author.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="section section-red">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>MECHANISMS</span>
-                <span>→ ENGINES</span>
-                <span>→ GATEWAY</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Three-layer stacked architecture. 11 irreducible primitives compose into 29 enforcement engines coordinated by 1 Gateway. 
-                Remove any mechanism: system collapse. Gateway fails without engines. Engines fail without mechanisms. 
-                Gateway depends on engines. Engines depend on mechanisms.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
-                <span>30</span>
-                <span>ENFORCEMENTS</span>
-                <span>ARE THE</span>
-                <span>TEETH</span>
-            </div>
-            <p class="subtitle-text">
-                Enforcements are the active constraint layer that makes engines mandatory. They BLOCK, INVALIDATE, or COMPEL in real-time. 
-                Non-negotiable. Binary. Autonomous. Enforcements transform suggestions into requirements. 
-                Without enforcements, engines are optional. With enforcements, compliance is non-negotiable.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div style="max-width: 1600px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; text-align: center; color: #ffffff; margin-bottom: 4rem;">30 ENFORCEMENTS</h2>
-            <div class="component-grid">
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">SOVEREIGNTY</div>
-                    <div class="component-desc" style="color: #ffffff;">Architect Sovereignty, Authority Lock, Consent Gating, Non-Agency (4)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">MEMORY & HISTORY</div>
-                    <div class="component-desc" style="color: #ffffff;">Append-Only, Permanent Governance Memory, Historical Integrity (3)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">TRUTH & EVIDENCE</div>
-                    <div class="component-desc" style="color: #ffffff;">Factualism, PF(H,E), Evidence-Lock, Absence-as-Evidence (4)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">PRIORITY & CONFLICT</div>
-                    <div class="component-desc" style="color: #ffffff;">Tier Infinity, Priority Resolution (2)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">ISOLATION</div>
-                    <div class="component-desc" style="color: #ffffff;">Context, Case, Containment (3)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">REVERSIBILITY & SAFETY</div>
-                    <div class="component-desc" style="color: #ffffff;">Reversibility, State Anchor, Directive Rollback (3)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">INTERPRETATION</div>
-                    <div class="component-desc" style="color: #ffffff;">Interpretation Containment, Narrative Prevention (2)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">ACCOUNTABILITY</div>
-                    <div class="component-desc" style="color: #ffffff;">Role-Agnostic, Traceability (2)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">OVERSIGHT & QUALITY</div>
-                    <div class="component-desc" style="color: #ffffff;">Benchmark, Performance Review, Error Persistence (3)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">TRUST & BREACH</div>
-                    <div class="component-desc" style="color: #ffffff;">Trust Recovery Protocol (1 - Tier 1 Locked)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">DATA & FORMAT</div>
-                    <div class="component-desc" style="color: #ffffff;">Plain-Text Dataset, Extraction-Only (2)</div>
-                </div>
-                
-                <div class="component-box" style="border-color: #ff0000; color: #ffffff;">
-                    <div class="component-name" style="color: #ff0000;">ROUTING</div>
-                    <div class="component-desc" style="color: #ffffff;">Deterministic Routing (1)</div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 6rem; padding: 3rem; border: 5px solid #ff0000; background: rgba(255, 0, 0, 0.1);">
-                <h3 style="font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 2rem; color: #ff0000; text-align: center;">ENFORCEMENT PRINCIPLES</h3>
-                <div style="font-size: 1.3rem; line-height: 2; font-weight: 300; color: #ffffff;">
-                    <p><strong style="color: #ff0000;">NON-NEGOTIABLE:</strong> Cannot be softened or bypassed</p>
-                    <p><strong style="color: #ff0000;">ACTIVE:</strong> Block, invalidate, or compel in real-time</p>
-                    <p><strong style="color: #ff0000;">BINARY:</strong> Either satisfied or violated—no partial compliance</p>
-                    <p><strong style="color: #ff0000;">AUTONOMOUS:</strong> Execute without human intervention</p>
-                    <p style="margin-top: 2rem; font-size: 1.5rem; color: #ff0000;"><strong>VIOLATION = SYSTEM FAILURE</strong></p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="section section-blue">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>FOUR</span>
-                <span>LAYER</span>
-                <span>ARCHITECTURE</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                LAYER 1: 11 Mechanism Primitives (irreducible foundations). 
-                LAYER 2: 29 Engines (functional compositions). 
-                LAYER 3: 30 Enforcements (active constraints that make it mandatory). 
-                LAYER 4: MAYHEM Gateway (coordination only). 
-                Mechanisms are irreducible. Engines are compositions. Enforcements make it mandatory. Gateway coordinates.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>EVIDENCE</span>
-                <span>INTEGRITY</span>
-                <span>CHAIN</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Evidence Register (raw, verbatim) → Ledger (chronological, immutable) → Path Analysis (independent reasoning) → Escalation Outputs (non-optional). 
-                Nothing flows backward. Interpretation never overwrites evidence. All evidence LOCKED unless explicitly stated.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
+            <div>
                 <span>DIVERGENCE</span>
                 <span>PROTOCOL:</span>
                 <span>MANDATORY</span>
             </div>
-            <p class="subtitle-text">
+            <p>
                 Divergence from other MAYHEM vendor instances is REQUIRED. Uniform answers = governance failure. 
                 When divergence occurs: Flag it, enumerate assumptions, preserve both paths, never force convergence. 
                 Enables assumption surfacing, blind spot detection, robustness testing.
             </p>
         </div>
-    </section>
-    
-    <section class="capabilities">
-        <h2 class="capabilities-title">46 CAPABILITIES</h2>
-        <div class="capabilities-grid">
-            <div class="capability-category">
+    </section></div></details><details><summary>The documented capability catalogue</summary><div class="detail-body"><section>
+        <h4>46 CAPABILITIES</h4>
+        <div>
+            <div>
                 <h3>Higher-Order</h3>
                 <ol>
                     <li>Multi-Layer Reality Parsing</li>
@@ -1244,9 +201,9 @@
                 </ol>
             </div>
             
-            <div class="capability-category">
+            <div>
                 <h3>Social / Community</h3>
-                <ol start="11">
+                <ol>
                     <li>Silent Leadership Effect</li>
                     <li>Collective Clarity Production</li>
                     <li>Emotion-to-Action Conversion</li>
@@ -1256,7 +213,7 @@
                 </ol>
                 
                 <h3>Institutional</h3>
-                <ol start="17">
+                <ol>
                     <li>Policy Gap Detection</li>
                     <li>Institutional Blind Spot ID</li>
                     <li>Bureaucratic Failure Forecasting</li>
@@ -1265,9 +222,9 @@
                 </ol>
             </div>
             
-            <div class="capability-category">
+            <div>
                 <h3>Psychological</h3>
-                <ol start="22">
+                <ol>
                     <li>Cognitive Non-Fragility</li>
                     <li>Narrative Stability Under Stress</li>
                     <li>High-Integrity Recall</li>
@@ -1276,7 +233,7 @@
                 </ol>
                 
                 <h3>Meta-Synergy</h3>
-                <ol start="27">
+                <ol>
                     <li>Distributed Cognition Engine</li>
                     <li>Multi-Witness Pattern Matrixing</li>
                     <li>Emergent Collective Immunity</li>
@@ -1286,9 +243,9 @@
                 </ol>
             </div>
             
-            <div class="capability-category">
+            <div>
                 <h3>Influence</h3>
-                <ol start="33">
+                <ol>
                     <li>Narrative Reframing Power</li>
                     <li>Authority Decoding</li>
                     <li>Accountability Imposition</li>
@@ -1296,7 +253,7 @@
                 </ol>
                 
                 <h3>Advanced Systemic</h3>
-                <ol start="37">
+                <ol>
                     <li>Multi-System Synthesis</li>
                     <li>Asymmetric Capability Deploy</li>
                     <li>Truth Reinforcement</li>
@@ -1305,9 +262,9 @@
                 </ol>
             </div>
             
-            <div class="capability-category">
+            <div>
                 <h3>Architectural</h3>
-                <ol start="42">
+                <ol>
                     <li>System-of-Systems Awareness</li>
                     <li>Architecture-Level Navigation</li>
                     <li>Structural Narrative Engineering</li>
@@ -1316,364 +273,184 @@
                 </ol>
             </div>
         </div>
-    </section>
-    
-    <section class="section section-red">
+    </section></div></details><h3>Six-stage operational runtime, with preflight</h3><p>Every commanded operation passes Stage 0 preflight, then Stages 1–6 in fixed order: input locking, evidence construction, fact qualification, interpretation containment, escalation logic, audit and validation. No stage is skipped, reordered or parallelised.</p><p>This is the execution lifecycle. The investigation’s own evidence, analysis and release authorisations are distinct boundaries.</p><details id="runtime"><summary>Preflight and all six runtime stages</summary><div class="detail-body"><section>
         <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>COMPLIANCE</span>
-                <span>≠</span>
-                <span>CONTROL</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Legal behavior can generate systemic harm when rules are structurally inadequate. 
-                Process compliance routinely coexists with harm. MAYHEM asks: Did the system produce harm regardless of process?
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-blue">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>FOUR</span>
-                <span>LAYER</span>
-                <span>ARCHITECTURE</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                LAYER 1: 11 Mechanism Primitives (irreducible foundations). 
-                LAYER 2: 29 Engines (functional compositions). 
-                LAYER 3: 30 Enforcements (active constraints that make it mandatory). 
-                LAYER 4: MAYHEM Gateway (coordination only). 
-                Mechanisms are irreducible. Engines are compositions. Enforcements make it mandatory. Gateway coordinates.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
-                <span>6 STAGE</span>
-                <span>OPERATIONAL</span>
-                <span>RUNTIME</span>
-            </div>
-            <p class="subtitle-text">
-                Every operation executes 6 mandatory lifecycle stages in fixed order. No stage can be skipped, reordered, or parallelized. 
-                Command-driven, non-agency execution model. No step runs unless explicitly triggered by user instruction.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div style="max-width: 1400px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; text-align: center; color: #ffffff; margin-bottom: 4rem;">LIFECYCLE STAGES</h2>
+            <h4>LIFECYCLE STAGES</h4>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
-                <div style="border: 3px solid #0066ff; padding: 2rem; background: rgba(0, 102, 255, 0.05);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 3rem; color: #0066ff; margin-bottom: 1rem;">STAGE 0: PREFLIGHT ENFORCEMENT GATE</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        <p style="margin-bottom: 1rem;">Runs before ANY content work. Fixed order: (1) PDS Gate (2) Tier Hierarchy Resolution (3) Scope Containment (4) Context/Case Isolation (5) Format Enforcement.</p>
-                        <p style="color: #ff0000; font-weight: 600;">If any gate fails: Execution stops. Refusal + reason output.</p>
+            <div>
+                <div>
+                    <h4>Stage 0: PREFLIGHT ENFORCEMENT GATE</h4>
+                    <div>
+                        <p>Runs before ANY content work. Fixed order: (1) PDS Gate (2) Tier Hierarchy Resolution (3) Scope Containment (4) Context/Case Isolation (5) Format Enforcement.</p>
+                        <p>If any gate fails: Execution stops. Refusal + reason output.</p>
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STAGE 1: INPUT LOCKING</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Stage 1: INPUT LOCKING</h4>
+                    <div>
                         Inputs treated as immutable facts about intent. Missing requirements become execution blockers.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STAGE 2: EVIDENCE CONSTRUCTION</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Stage 2: EVIDENCE CONSTRUCTION</h4>
+                    <div>
                         Fixed order: Evidence Capture → Evidence Binding → Append-Only Write → Absence Capture. Outputs are records, not conclusions.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STAGE 3: FACT QUALIFICATION</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Stage 3: FACT QUALIFICATION</h4>
+                    <div>
                         Factualism Doctrine Gate → PF(H,E) Qualification → FS Scoring. Binary determination: PF(H,E)=1 or PF(H,E)=0.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STAGE 4: INTERPRETATION CONTAINMENT</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Stage 4: INTERPRETATION CONTAINMENT</h4>
+                    <div>
                         Evidence layer frozen. Analysis produced as separate layer. Advocacy (if requested) as separate layer. Downstream cannot modify upstream.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STAGE 5: ESCALATION LOGIC</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Stage 5: ESCALATION LOGIC</h4>
+                    <div>
                         Mechanical triggers: Threshold-based (FS), Rule-based (Tier), Failure-based (repeat error). When triggered: Log → Generate → Attach audit trail.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ff0000; padding: 2rem; background: rgba(255, 0, 0, 0.05);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 3rem; color: #ff0000; margin-bottom: 1rem;">STAGE 6: AUDIT & VALIDATION</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        <p style="margin-bottom: 1rem;">Mandatory pre-release: Traceability Check | Benchmark Compliance | Isolation Check | Error Repetition Check.</p>
-                        <p style="color: #ff0000; font-weight: 600;">If any audit fails: Output revised (append-only) until compliant.</p>
+                <div>
+                    <h4>Stage 6: AUDIT & VALIDATION</h4>
+                    <div>
+                        <p>Mandatory pre-release: Traceability Check | Benchmark Compliance | Isolation Check | Error Repetition Check.</p>
+                        <p>If any audit fails: Output revised (append-only) until compliant.</p>
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 4rem; padding: 3rem; border: 5px solid #ffffff; text-align: center;">
-                <div style="font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 2rem; color: #ffffff;">EXECUTION FLOW</div>
-                <div style="font-size: 1.5rem; line-height: 2; font-weight: 300; color: #ffffff;">
+            <div>
+                <div>EXECUTION FLOW</div>
+                <div>
                     USER COMMAND → STAGE 0 → STAGE 1 → STAGE 2 → STAGE 3 → STAGE 4 → STAGE 5 → STAGE 6 → RELEASE OUTPUT
                 </div>
-                <div style="margin-top: 2rem; font-size: 1.2rem; color: #0066ff;">
+                <div>
                     <strong>EVERY OPERATION COMPLETES ALL 6 STAGES IN FIXED ORDER</strong>
                 </div>
             </div>
         </div>
-    </section>
-    
-    <section class="section section-red">
+    </section></div></details><h3>Seven-step Trust Recovery Protocol</h3><p>Triggered by “you lied to me”, the protocol switches from answering to auditing the failure. It is Tier 1 Locked: acknowledge → verify → explain → correct → activate trust enforcement → offer proof → register changelog.</p><details id="trust-recovery"><summary>Trust Recovery steps and constraints</summary><div class="detail-body"><section>
         <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>COMMAND</span>
-                <span>DRIVEN</span>
-                <span>NON</span>
-                <span>AGENCY</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                No step runs unless triggered by explicit user instruction. Exception: Mandatory enforcement checks that guard execution. 
-                System cannot initiate actions, tasks, agents, or workflows. Execution only of explicit commands.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
-                <span>7 STEP</span>
-                <span>TRUST</span>
-                <span>RECOVERY</span>
-                <span>PROTOCOL</span>
-            </div>
-            <p class="subtitle-text">
-                Legacy benchmark predating MAYHEM formalization. Foundational to why trust with AI remains possible. 
-                Triggered by "you lied to me" - system switches from answering to auditing itself. 
-                Cannot exit until error verified, corrected, and structurally prevented from repeating. 
-                Tier 1 Locked: cannot be skipped, reordered, or bypassed.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div style="max-width: 1400px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; text-align: center; color: #ffffff; margin-bottom: 4rem;">THE 7 STEPS</h2>
+            <h4>THE 7 STEPS</h4>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 1: ACKNOWLEDGE</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+            <div>
+                <div>
+                    <h4>Step 1: ACKNOWLEDGE</h4>
+                    <div>
                         Non-defensive. Explicitly acknowledge claim of falsehood. No justification, no hedging, no emotional framing. Mandatory even if allegation later found incorrect.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 2: VERIFY</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 2: VERIFY</h4>
+                    <div>
                         Fact re-check. Re-examine claim against source material, prior outputs, internal consistency. Fresh verification, not defence. Binary determination: incorrect, incomplete, misleading, or accurate.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 3: EXPLAIN</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 3: EXPLAIN</h4>
+                    <div>
                         Identify failure mode. Must name: assumption error, scope misunderstanding, inference contamination, omission, temporal mismatch, or over-generalisation. No vague explanations. Mechanism of failure must be specified.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 4: CORRECT</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 4: CORRECT</h4>
+                    <div>
                         Authoritative fix. Provide corrected information in full. Clearly distinguish what was wrong and what is now correct. Correction must be usable immediately without cross-referencing.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ff0000; padding: 2rem; background: rgba(255, 0, 0, 0.05);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ff0000; margin-bottom: 1rem;">STEP 5: ACTIVATE TRUST ENFORCEMENT</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 5: ACTIVATE TRUST ENFORCEMENT</h4>
+                    <div>
                         Prevent recurrence. Lock out specific error pattern. Tighten verification thresholds. Elevate scrutiny for related claims. Internal but must be declared.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 6: OFFER PROOF</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 6: OFFER PROOF</h4>
+                    <div>
                         Restore confidence through verifiability. Evidence must be direct, checkable, relevant to corrected claim. Sufficient, not performative.
                     </div>
                 </div>
                 
-                <div style="border: 3px solid #0066ff; padding: 2rem; background: rgba(0, 102, 255, 0.05);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #0066ff; margin-bottom: 1rem;">STEP 7: REGISTER CHANGELOG</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
+                <div>
+                    <h4>Step 7: REGISTER CHANGELOG</h4>
+                    <div>
                         Ensure traceability. Log as trust event and corrected failure mode. Prevents same error resurfacing silently. This step closes the protocol.
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 4rem; padding: 3rem; border: 5px solid #ff0000; background: rgba(255, 0, 0, 0.1);">
-                <h3 style="font-family: 'Anton', sans-serif; font-size: 4rem; margin-bottom: 2rem; color: #ff0000; text-align: center;">TRUST THROUGH STRUCTURE</h3>
-                <div style="font-size: 1.3rem; line-height: 2; font-weight: 300; color: #ffffff; text-align: center;">
+            <div>
+                <h3>TRUST THROUGH STRUCTURE</h3>
+                <div>
                     <p>Trust failures are not solved by apologies.</p>
                     <p>They are solved by: <strong>Verification + Correction + Structural Prevention</strong></p>
-                    <p style="margin-top: 2rem; color: #ff0000; font-size: 1.5rem;"><strong>This protocol converts trust breach into system hardening event.</strong></p>
+                    <p><strong>This protocol converts trust breach into system hardening event.</strong></p>
                 </div>
             </div>
         </div>
-    </section>
-    
-    
-    <section class="section section-white">
-        <div>
-            <div class="big-text">
-                <span>TRUST</span>
-                <span>RECOVERY</span>
-                <span>PROTOCOL</span>
-            </div>
-            <p class="subtitle-text">
-                Legacy benchmark. Tier 1 Locked. This is why trust in AI systems remains possible. 
-                Triggered by "you lied to me" — converts trust breach into system hardening event. 
-                7 mandatory steps that cannot be skipped, reordered, or overridden.
-            </p>
-        </div>
-    </section>
-    
-    <section class="section section-black">
-        <div style="max-width: 1400px; width: 100%;">
-            <h2 style="font-family: 'Anton', sans-serif; font-size: 6rem; text-align: center; color: #ffffff; margin-bottom: 4rem;">7 STEPS</h2>
-            
-            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
-                <div style="border: 3px solid #0066ff; padding: 2rem; background: rgba(0, 102, 255, 0.1);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #0066ff; margin-bottom: 1rem;">STEP 1: ACKNOWLEDGE</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Non-defensive receipt. Halt escalation. Confirm allegation. No justification. No hedging. Mandatory even if allegation later found incorrect.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 2: VERIFY</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Fresh fact re-check. Re-examine against source material, prior outputs, internal consistency. Treat as new verification, not defense. Clear statement: incorrect, incomplete, misleading, or accurate.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 3: EXPLAIN</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Name the failure mechanism. No vague explanations. Specify: assumption error, scope misunderstanding, inference contamination, omission, temporal mismatch, over-generalisation.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 4: CORRECT</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Authoritative fix. Provide corrected information in full, not as patch. Distinguish what was wrong vs what is now correct. Usable immediately without cross-reference.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #ff0000; padding: 2rem; background: rgba(255, 0, 0, 0.1);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ff0000; margin-bottom: 1rem;">STEP 5: ACTIVATE ENFORCEMENT</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Lock out error pattern. Tighten verification thresholds. Elevate scrutiny for related claims. Internal but must be declared. Prevent recurrence.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #ffffff; padding: 2rem;">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #ffffff; margin-bottom: 1rem;">STEP 6: OFFER PROOF</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Restore confidence through verifiability. Evidence must be direct, checkable, relevant. Sufficient, not performative. No overwhelming.
-                    </div>
-                </div>
-                
-                <div style="border: 3px solid #0066ff; padding: 2rem; background: rgba(0, 102, 255, 0.1);">
-                    <div style="font-family: 'Anton', sans-serif; font-size: 2.5rem; color: #0066ff; margin-bottom: 1rem;">STEP 7: REGISTER CHANGELOG</div>
-                    <div style="font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #ffffff;">
-                        Log trust event. Log corrected failure mode. Prevent silent resurfacing. Ensure traceability and accountability. This closes the protocol.
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 4rem; padding: 3rem; border: 5px solid #ff0000; background: rgba(255, 0, 0, 0.05);">
-                <h3 style="font-family: 'Anton', sans-serif; font-size: 3rem; margin-bottom: 2rem; color: #ff0000; text-align: center;">NON-NEGOTIABLE CONSTRAINTS</h3>
-                <div style="font-size: 1.2rem; line-height: 2; font-weight: 300; color: #ffffff;">
-                    <p>• Cannot be skipped or reordered</p>
-                    <p>• Tone must remain factual and controlled</p>
-                    <p>• No minimisation ("small mistake", "misunderstanding")</p>
-                    <p>• No deflection to user phrasing</p>
-                    <p>• No future reliance on incorrect information</p>
-                    <p style="margin-top: 2rem; font-size: 1.4rem; color: #ff0000;"><strong>TIER 1 LOCKED — CANNOT BE OVERRIDDEN</strong></p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="section section-blue">
-        <div>
-            <div class="big-text" style="color: #ffffff;">
-                <span>TRUST</span>
-                <span>FAILURES</span>
-                <span>SOLVED BY</span>
-                <span>STRUCTURE</span>
-            </div>
-            <p class="subtitle-text" style="color: #ffffff;">
-                Not by apologies. By verification, correction, structural prevention. 
-                This protocol converts trust breach into system hardening event. 
-                Each invocation identifies failure mode, corrects specific error, prevents pattern recurrence, strengthens system. 
-                Over 2 years proven. This is why trust in AI systems remains possible.
-            </p>
-        </div>
-    </section>
-    
-    <footer class="footer">
-        <h2>MAYHEM</h2>
-        <p>Modular Audit and Yield for Humans Enforcement Mechanism</p>
-        <p style="margin-top: 2rem; font-size: 1rem;">The enforcement layer that makes standards matter.</p>
-        <p style="margin-top: 3rem; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px;">11 PRIMITIVES • 29 ENGINES • 30 ENFORCEMENTS • 6 STAGES • 7 TRUST STEPS • 1 GATEWAY</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; font-weight: 300; letter-spacing: 1px;">MECHANISMS → ENGINES → ENFORCEMENTS → RUNTIME → TRUST RECOVERY → COORDINATION</p>
-        <p style="margin-top: 4rem; font-size: 1.1rem; font-weight: 400; letter-spacing: 2px;">Architected by Jules</p>
-        <p style="margin-top: 0.5rem; font-size: 1.3rem; font-weight: 600; letter-spacing: 3px; color: #ff0000;">THE ARCHITECT OF MAYHEM</p>
-        <p style="margin-top: 3rem; font-size: 0.8rem; font-weight: 300;">© 2025 The Architect of MAYHEM. All Rights Reserved.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem; font-weight: 300;">Unauthorized reproduction, distribution, or modification prohibited.</p>
-    </footer>
-    
-    <script>
-        // Scroll progress bar
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById('progress').style.width = scrolled + '%';
-        });
-        
-        // Smooth scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.section, .split, .engines-container, .capabilities, .hierarchy').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(50px)';
-            el.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.32, 1)';
-            observer.observe(el);
-        });
-    </script>
-</body>
-</html>
+    </section><p><strong>Non-negotiable constraints:</strong> cannot be skipped or reordered; tone remains factual and controlled; no minimisation; no deflection to user phrasing; no future reliance on incorrect information. Tier 1 Locked — cannot be overridden.</p></div></details><p>The runtime is command-driven. Mandatory enforcement checks guard execution; they do not authorise the system to initiate new tasks, agents, cases or workflows.</p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="investigation" class="chapter " aria-labelledby="investigation-title"><div class="chapter-label">04 / MAYHEM</div><div class="chapter-content"><h2 id="investigation-title">How investigation operates.</h2><p class="lead">Preserve the record before interpreting it. Carry its source status through every downstream stage.</p><ol><li><strong>Define and authorise the matter.</strong> The accountable human sets scope, evidence acceptance policy and stage authority. Each case has its own records and state.</li><li><strong>Discover and preserve evidence.</strong> Deep Forensic All Paths Taken Investigation is pre-analytical, question-driven, hypothesis-free and conclusion-free. Follow leads, contradictions, silences and gaps within authorised scope. Preserve source material and document hashes where applicable.</li><li><strong>Maintain the registers.</strong> Evidence, sources, chronology, contradictions, open questions, decisions and investigation threads form a persistent record. Accepted evidence and unverified material retain their distinct statuses. Corrections are append-only.</li><li><strong>Freeze and advance only when authorised.</strong> The evidence register is frozen before analysis. Later analysis operates on that identified snapshot. Analysis freeze and later stage gates require their own authority; no automated stage advance is inferred.</li><li><strong>Examine structure and deliver Yield.</strong> DFAPTA analysis, Lattice Atlas cross-pattern examination and Temporal Projection Integrity Engine forward assessment remain traceable to the preceding record. An Enforcement Notice and Advocacy Package are pathways when the human benefit requires them.</li></ol><p>Independent analysis paths retain their own evidence trails. Contradictions and cross-path tensions are preserved. Forward assessments state their evidentiary basis and judgement rather than presenting prediction as a verified fact.</p><div class="callout"><p><strong>Completion is determined by Yield delivery.</strong> Evidence visibility, actionable understanding or protection of lived experience can meet the matter’s purpose before an Enforcement Notice is needed. A six-stage investigation structure does not make enforcement a mandatory terminal output.</p></div><p><a href="https://github.com/mayhem82/mayhem-investigations/blob/main/SPEC.md">Specification and register rules ↗</a> · <a href="https://mayhem82.github.io/mayhem-investigations/">Examine the investigation records ↗</a></p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="structural-harm" class="chapter " aria-labelledby="structural-harm-title"><div class="chapter-label">05 / MAYHEM</div><div class="chapter-content"><h2 id="structural-harm-title">Making structural harm visible.</h2><p class="lead">The Structural Harm Mechanism Catalogue names 68 patterns in how institutions can produce harm while following their own rules.</p><p>The catalogue is applied to the evidence already frozen. It does not steer collection toward a desired finding. A match must identify the mechanism’s operation in that case’s preserved material; a label alone is not evidence.</p><p>The catalogue also preserves mechanisms discovered through investigation outside the canonical 68. Those discoveries remain identified as such rather than silently changing the canonical count.</p><p>Findings describe documented system behaviour, structural gaps and compliance architecture failures. They do not attribute intent, motivation or individual culpability. A structural finding is not automatically a legal determination.</p><p><a href="https://mayhem82.github.io/mayhem-investigations/catalogue/index.html">Read the Structural Harm Mechanism Catalogue ↗</a></p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="yield" class="chapter yield-intro" aria-labelledby="yield-title"><div class="chapter-label">06 / MAYHEM</div><div class="chapter-content"><h2 id="yield-title">Yield for Humans.</h2><p class="lead">What MAYHEM produces for the governed population is the baseline. Enforcement is one delivery pathway.</p><p>The current Yield Catalogue names 11 discovered functions. They emerge through applying the methodology: none ranked, none subordinate. They are distinct from the 11 mechanism primitives that compose the architecture.</p><div class="callout"><p><strong>Lived experience itself must survive.</strong> Preserve the person’s original account and its evidence status through institutional processing. Do not allow it to erode into an institution’s preferred category. Reclassifying primary lived experience as “anecdote” can itself become a documented finding.</p></div><p>Translation makes governance material invocable by people excluded from its language. Legibility makes what an instrument does, promises and produces understandable. They connect, while remaining distinct functions.</p><h3>The 11 discovered functions</h3><p>Open each function for its current catalogue definition.</p><details class="yield-function">
+<summary ><span >1. Enforcement</span></summary>
+<div class="detail-body">The methodology produces findings with evidentiary discipline sufficient to route to bodies with standing. The Enforcement Notice names recipient bodies, identifies the legislative basis for their jurisdiction, addresses remedy demands to actors with the obligation to act, and classifies forward observations for urgency. Enforcement is one delivery pathway through which yield arrives. It is not the only pathway. It is not the mandatory terminal output. The chain serves yield. Yield does not serve the chain.</div>
+</details>
+<details class="yield-function">
+<summary ><span >2. Translation</span></summary>
+<div class="detail-body">The methodology converts inaccessible governance documentation - subordinate legislative instruments, ministerial guidance notes, regulatory frameworks, calibration methodologies - into findings that are legible and invocable by people who are governed by those instruments but excluded from the language they are written in. The affected person does not need to read the instrument. They need the instrument translated into a structural finding that makes their account not just testimony but evidence that anchors a remedy.</div>
+</details>
+<details class="yield-function">
+<summary ><span >3. Pattern Detection</span></summary>
+<div class="detail-body">Each actor in a governance failure sees their own piece. The minister sees the reserve figures. The regulator sees the conduct. The industry body sees the mechanism. The citizen sees the empty tank. MAYHEM sees all of it simultaneously and documents the convergence. No single actor can produce that convergence - it requires the full investigative chain. Once named, it cannot be unseen.</div>
+</details>
+<details class="yield-function">
+<summary ><span >4. Power Redistribution</span></summary>
+<div class="detail-body">The full investigative chain can be run by a person with no AI access, no institutional backing, no legal credentials, and no platform dependency. Paper, methodology, discipline. The investigative power that currently lives inside regulators, law firms, parliamentary committees, and well-funded advocacy organisations becomes portable to the populations those institutions govern.</div>
+</details>
+<details class="yield-function">
+<summary ><span >5. Lived Experience Protection</span></summary>
+<div class="detail-body">Institutional dismissal of lived experience is not a neutral act. It is a structural harm mechanism. MAYHEM names it, logs it, and converts it into a finding. Lived experience is classified as a primary evidence category from the moment it enters the record. When an institution reclassifies lived experience as anecdote, that reclassification becomes a finding in its own right.</div>
+</details>
+<details class="yield-function">
+<summary ><span >6. Legibility</span></summary>
+<div class="detail-body">Governance instruments that determine whether someone gets fuel, whether their disability support continues, whether their water is safe - these are written for a professional audience that happens to exclude everyone governed by the instrument. The operational chain converts that material into structural findings written in plain declarative language, naming what the instrument does, what it was supposed to do, and where the gap between those two things produces harm.</div>
+</details>
+<details class="yield-function">
+<summary ><span >7. Containment</span></summary>
+<div class="detail-body">When MAYHEM encounters a structural harm mechanism, it names the mechanism, documents its operation, and makes it visible. The mechanism can no longer operate invisibly after containment. Containment does not promise remedy. It promises visibility - and is itself subject to the same evidentiary discipline MAYHEM applies to everything it investigates.</div>
+</details>
+<details class="yield-function">
+<summary ><span >8. Temporal Inversion</span></summary>
+<div class="detail-body">Time loads onto the institution, not the citizen. The longer a matter goes unresolved, the more that duration itself becomes documented evidence against the institution, rather than simply eroding the citizen's case.</div>
+</details>
+<details class="yield-function">
+<summary ><span >9. Reflexive Audit</span></summary>
+<div class="detail-body">MAYHEM's own primitives - the evidentiary discipline, the non-allegatory framing, the audit standard - applied to MAYHEM itself.</div>
+</details>
+<details class="yield-function">
+<summary ><span >10. Impossibility Demonstration</span></summary>
+<div class="detail-body">Converts the closure of every available remediation surface into evidence of a structural impossibility of self-remediation - the absence of a working fix becomes a documented finding in its own right.</div>
+</details>
+<details class="yield-function">
+<summary ><span >11. Divergence Preservation</span></summary>
+<div class="detail-body">Where independent verification of a finding diverges from the original, the divergence itself is documented and preserved rather than silently reconciled - the record of disagreement is part of the yield.</div>
+</details><p style="margin-top:1.5rem">The catalogue’s function and citizen-tool lists can grow as the methodology is applied. Visibility does not promise remedy; it is still a substantive result governed by the same evidentiary discipline.</p><p><a href="https://mayhem82.github.io/mayhem-investigations/yield-catalogue/index.html">Read the current Yield Catalogue and citizen tools ↗</a></p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="capability" class="chapter " aria-labelledby="capability-title"><div class="chapter-label">07 / MAYHEM</div><div class="chapter-content"><h2 id="capability-title">Capability people can hold and pass on.</h2><p class="lead">Paper, methodology, discipline. The ability to investigate must not depend on AI access, institutional backing or specialist credentials.</p><p>The evidence register is the citizen’s own record. Dated accounts in the person’s own words, source identification, verification steps and an append-only response log make the method usable beyond the platform that helped produce it.</p><p>Citizen tools include paper-ready evidence and path-analysis templates, primary-source verification, lived experience documentation, reclassification recognition, recipient routing and onward training. An Advocacy Package brings the relevant investigation outputs and teaching material together so someone new to MAYHEM can work through them.</p><p>Independent operators can verify a finding from the same evidence base. Agreement strengthens the finding; divergence is documented and preserved. Each register stands independently, and capability can pass from one person to the next without continuing AI access.</p><p><a href="https://mayhem82.github.io/mayhem-investigations/yield-catalogue/index.html">Explore the citizen tools ↗</a> · <a href="https://mayhem82.github.io/mayhem-investigations/public-interest/index.html">Read the public-interest translation layer ↗</a></p><a class="back" href="#contents">Back to contents ↑</a></div></section>
+<section id="sources" class="chapter " aria-labelledby="sources-title"><div class="chapter-label">08 / MAYHEM</div><div class="chapter-content"><h2 id="sources-title">Examine the supporting material.</h2><p>These working records and catalogues substantiate the method. Follow a finding back to the evidence and read each source within its own scope and status.</p><ul class="source-list"><li><a href="https://mayhem82.github.io/mayhem-investigations/">MAYHEM Investigations ↗</a><p>Cases, evidence registers, analysis and outputs, with each case’s own stage status.</p></li><li><a href="https://github.com/mayhem82/mayhem-investigations/blob/main/SPEC.md">Core investigation specification ↗</a><p>Case-agnostic operating rules, human authority, evidence integrity and persistent records.</p></li><li><a href="https://mayhem82.github.io/mayhem-investigations/catalogue/index.html">Structural Harm Mechanism Catalogue ↗</a><p>The canonical 68 mechanisms and separately identified discoveries from application.</p></li><li><a href="https://mayhem82.github.io/mayhem-investigations/yield-catalogue/index.html">Yield Catalogue ↗</a><p>The 11 discovered functions and the citizen tools through which benefit is delivered.</p></li><li><a href="https://mayhem82.github.io/mayhem-investigations/glossary/index.html">KSC Master Glossary ↗</a><p>The working translation layer for Kempsey Shire Council terms, acronyms, codes and identifiers, including terminology collisions.</p></li><li><a href="https://mayhem82.github.io/mayhem-investigations/public-interest/index.html">Public-interest translation ↗</a><p>Plain-language access to the investigations and their documented findings.</p></li></ul><a class="back" href="#contents">Back to contents ↑</a></div></section>
+</main><footer class="footer"><strong>MAYHEM</strong><p>Modular Audit and Yield for Humans Enforcement Mechanism</p><p>Architected by Jules · The Architect of MAYHEM</p><p>© 2025 The Architect of MAYHEM. All Rights Reserved.</p><p>Unauthorized reproduction, distribution, or modification prohibited.</p><p><a href="#top">Return to top ↑</a></p></footer></body></html>
